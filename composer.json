@@ -1,0 +1,14 @@
+{
+    "name": "antoniopprimera/bapi",
+    "description": "The business layer base for a Laravel Application",
+    "type": "library",
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Antonio Primera",
+            "email": "antonio@cus.ro"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
