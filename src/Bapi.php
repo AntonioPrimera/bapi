@@ -39,7 +39,7 @@ class Bapi
 	/**
 	 * @throws Exception
 	 */
-	public function __call($method, $params)
+	public function __call($method, $params) : mixed
     {
     	//you can call "run" ...
         if ($method === 'run') {
@@ -60,7 +60,7 @@ class Bapi
 	/**
 	 * @throws Exception
 	 */
-	public static function __callStatic($method, $params)
+	public static function __callStatic($method, $params) : mixed
     {
     	//you can call "run" statically
         if ($method === 'run') {
@@ -70,10 +70,19 @@ class Bapi
         //any other call will be forwarded to a newly instanced bapi
         return (new static)->$method(...$params);
     }
-    
-    public function __invoke(array $attributes = [])
+	
+	/**
+	 * The bapi can be invoked (instance used as a function), giving
+	 * it the parameters expected by the handle method
+	 *
+	 * @param ...$args
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 */
+    public function __invoke(...$args) : mixed
     {
-        return $this->run($attributes);
+        return $this->handleRun($args);
     }
     
     //--- Setup and run preparation -----------------------------------------------------------------------------------
