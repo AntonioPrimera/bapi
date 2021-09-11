@@ -10,18 +10,27 @@
         }
     ],
     "minimum-stability": "dev",
+    "require": {
+        "illuminate/support": "^8"
+    },
     "require-dev": {
         "orchestra/testbench": "6.x-dev"
     },
     
     "extra": {
+        "laravel": {
+            "providers": [
 
+            ]
+        }
     },
+
     "autoload": {
         "psr-4": {
             "AntonioPrimera\\Bapi\\": "src/"
         }
     },
+
     "autoload-dev": {
         "psr-4": {
             "AntonioPrimera\\Bapi\\Tests\\": "tests/"

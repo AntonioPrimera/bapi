@@ -1,0 +1,113 @@
+<?php
+namespace DummyNamespace;
+
+use AntonioPrimera\Bapi\Bapi;
+use AntonioPrimera\Bapi\Exceptions\BapiException;
+
+class DummyClass extends Bapi
+{
+    
+    /**
+     * Business data validation
+     *
+     * @throws BapiException
+     * @return bool
+     */
+    protected function validateData()
+    {
+        // Do any manual validations and throw an Exception or just return false (a BapiException will be thrown if
+        // this method returns false). Return true if the validation was successful. Data provided to the Bapi
+        // should already be pre-validated. This method should be used for business specific validations.
+        
+        return true;
+    }
+    
+    /**
+     * Data preparation for Bapi run
+     */
+    protected function prepareData()
+    {
+        // Prepare the data for the Bapi. This method doesn't return anything. Anything you change or add,
+        // you should add to the bapi instance. Magic getters and setters allow you to set any attribute
+    }
+    
+    /**
+     * Authorization check
+     *
+     * @return bool
+     */
+    protected function authorize()
+    {
+        // Return true for a successful authorization check or false to fail the authorization check.
+        
+        return false;
+    }
+    
+    /**
+     * !!!
+     * !!!   Don't forget to update this comment:
+     * !!!      - explain what the bapi does
+     * !!!      - add the parameters, thrown exceptions and return type
+     * !!!
+     */
+    public function handle()
+    {
+        // Add your business logic here
+    }
+    
+    //--- Available Hooks ---------------------------------------------------------------------------------------------
+    
+    /**
+     * Hook - run before the authorization check
+     */
+    protected function beforeAuthorization()
+    {
+        // This method will run just before the authorization.
+        // This method will not be run if the bapi is run without authorization check.
+    }
+    
+    /**
+     * Hook - run after a successful authorization check
+     */
+    protected function afterAuthorization()
+    {
+        // This method will run immediately after the authorization, if the authorization is successful.
+        // This method will not be run if the bapi is run without authorization check.
+    }
+    
+    /**
+     * Hook - run before the handle method is called.
+     */
+    protected function beforeHandle()
+    {
+        // This method is run just before running the handle method, so if you have any logic to run
+        // after the authorization and the validation, implement it here.
+    }
+    
+    /**
+     * Hook - Post-processing of the bapi result.
+     * !!! Don't forget to update this comment and tell what you actually do with the result.
+     *
+     * @param $result
+     *
+     * @return mixed
+     */
+    protected function afterHandle($result)
+    {
+        // Any post-bapi-run data processing goes here. The result of the handle method if received as
+        // the $result parameter. Whatever you return here, will be the result returned by the bapi
+        // If you don't want to post-process the result, just remove this hook.
+        
+        return $result;
+    }
+
+    /**
+     * Hook - if any exception is thrown, it is caught and forwarded to this
+     * method. You can check it and act on it here. By default, the
+     * exception is just thrown and nothing is returned.
+     */
+    protected function handleException(\Exception $exception)
+	{
+		throw $exception;
+	}
+}

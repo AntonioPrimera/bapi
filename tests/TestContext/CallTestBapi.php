@@ -5,28 +5,26 @@ namespace AntonioPrimera\Bapi\Tests\TestContext;
 use AntonioPrimera\Bapi\Bapi;
 
 /**
- * @method run(TestModel $testModel, int $num, TestModel $nullableModel = null, int $count = 9, $msg = 'OK', \Exception|bool $throwException = false)
+ * @method run(TestModel $testModel, int $num, ?TestModel $nullableModel = null, int $count = 9, $msg = 'OK', \Exception|bool $throwException = false)
  */
 class CallTestBapi extends Bapi
 {
 	public $handleMethodWasCalled = false;
 	public $methodCalls = [];
-	
-	protected function setup()
-	{
-		$this->methodCalls[] = 'setup';
-	}
+	public $attributeLists = [];
 	
 	public function handle(
 		TestModel $testModel,
 		int $num,
-		TestModel $nullableModel = null,
+		?TestModel $nullableModel = null,
 		int $count = 9,
 		$msg = 'OK',
 		\Exception|bool $throwException = false
 	)
 	{
+		$this->methodCalls[] = 'handle';
 		$this->handleMethodWasCalled = true;
+		$this->attributeLists['handle'] = $this->attributes;
 		
 		//if an exception instance was given, throw it
 		//if boolean true was given throw a new generic exception
@@ -39,5 +37,63 @@ class CallTestBapi extends Bapi
 	public function exposeAttributes()
 	{
 		return $this->attributes;
+	}
+	
+	//--- Hooks -------------------------------------------------------------------------------------------------------
+	
+	protected function setup()
+	{
+		$this->methodCalls[] = 'setup';
+	}
+	
+	protected function prepareData(): void
+	{
+		$this->attributeLists['prepareData'] = $this->attributes;
+		$this->methodCalls[] = 'prepareData';
+	}
+	
+	protected function validateData(): bool
+	{
+		$this->attributeLists['validateData'] = $this->attributes;
+		$this->methodCalls[] = 'validateData';
+		
+		return strlen($this->msg) < 10;
+	}
+	
+	protected function beforeAuthorization()
+	{
+		$this->attributeLists['beforeAuthorization'] = $this->attributes;
+		$this->methodCalls[] = 'beforeAuthorization';
+	}
+	
+	protected function authorize()
+	{
+		$this->attributeLists['authorize'] = $this->attributes;
+		$this->methodCalls[] = 'authorize';
+		
+		return true;
+	}
+	
+	protected function afterAuthorization()
+	{
+		$this->attributeLists['afterAuthorization'] = $this->attributes;
+		$this->methodCalls[] = 'afterAuthorization';
+	}
+	
+	protected function beforeHandle()
+	{
+		$this->attributeLists['beforeHandle'] = $this->attributes;
+		$this->methodCalls[] = 'beforeHandle';
+	}
+	
+	protected function afterHandle($result): mixed
+	{
+		$this->attributeLists['afterHandle'] = $this->attributes;
+		$this->methodCalls[] = 'afterHandle';
+		
+		if ($this->msg === 'AHC')
+			$result['afterHandleChanges'] = true;
+		
+		return $result;
 	}
 }
