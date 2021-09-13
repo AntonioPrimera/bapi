@@ -1,6 +1,6 @@
-#BAPI - Business API
+# BAPI - Business API
 
-##Scope
+## Scope
 
 The scope of a BAPI is to encapsulate the business logic and to create reliable,
 self-contained pieces of business functionality.
@@ -10,9 +10,9 @@ logic deals with how the application works and interacts with the user (Controll
 Routes, Front-End, UI, UX etc.), the business logic makes sure that the workflows specific
 to the application are run in a reliable way.
 
-##Why BAPIs?
+## Why BAPIs?
 
-If you have ever developer an application, you know that the logic tends to get more complicated
+If you have ever developed an application, you know that the logic tends to get more complicated
 with each functionality you add and with each user requirement.
 
 In order to be able to rely on the previously written bits of business logic whenever using
@@ -30,11 +30,11 @@ During this flow, you would:
 5. create notifications for all users who follow the thread (BAPI: NotifyThreadFollowersBapi)
 
 Of course this is just to exemplify how you could split your business logic into BAPIs. You can
-also implement such a functionality in other ways, with or witout BAPIs.
+also implement such a functionality in other ways, with or without BAPIs.
 
-##Usage
+## Usage
 
-###Installation
+### Installation
 
 Import the bapi package through composer:
 
@@ -42,7 +42,7 @@ Import the bapi package through composer:
   composer require antonioprimera/bapi
 ```
 
-###Creating a new Bapi
+### Creating a new Bapi
 
 An artisan command to create a new Bapi will be available after installing the package.
 
@@ -62,7 +62,7 @@ are plenty of other hooks in the run lifecycle of the Bapi, where you can write 
 logic. I encourage you to use these hooks if necessary, rather than creating a huge "handle"
 method.
 
-###Implementing your Bapi & the Bapi run lifecycle
+### Implementing your Bapi & the Bapi run lifecycle
 
 Whenever you instantiate the bapi, the "setup" method is called, if implemented. By default,
 the setup method is not implemented. If you call the run method statically (check the chapter
@@ -110,7 +110,7 @@ like this in any of the methods...
         && $this->post->contents === $this->contents;
 ```
 
-###Running your Bapi
+### Running your Bapi
 
 You can call your bapi using the **run** method, either statically or as an instance method
 after instancing your bapi. The run method doesn't exist in the Bapi and you should not
@@ -140,7 +140,7 @@ the following ways.
     $updatePostBapi($post, 'New title', 'Some contents');
 ```
 
-###Skipping the authorization check
+### Skipping the authorization check
 
 Sometimes, when you have a more complex scenario, where a bapi calls other Bapis as part of
 the business logic, you might want to do all necessary authorization checks in the complex
@@ -180,9 +180,9 @@ Although you might never use it, a **withAuthorizationCheck()** method is availa
 be called to re-enable the authorization check if it was disabled previously for a Bapi
 instance.
 
-##Known issues / quirks
+## Known issues / quirks
 
-###1. Arguments given to the constructor
+### 1. Arguments given to the constructor
 
 When you instantiate a bapi, all arguments of the handle method are made available as
 instance attributes and their values are either null or their default values from the
