@@ -11,7 +11,7 @@ class MakeBapi extends GeneratorCommand
      *
      * @var string
      */
-    protected $name = 'make:bapi';
+    protected $signature = 'make:bapi';
 
     /**
      * The console command description.
