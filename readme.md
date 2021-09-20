@@ -46,15 +46,15 @@ Import the bapi package through composer:
 
 An artisan command to create a new Bapi will be available after installing the package.
 
-For example, in order to create a new "CreatePostBapi", you can run the following artisan
-command in your console:
+For example, you can run the following artisan command in your console in order to create
+a new Bapi in "app/Bapis/Posts/CreatePostBapi.php":
 
 ```bash
-    php artisan make:bapi Bapis/Posts/CreatePostBapi
+    php artisan make:bapi Posts/CreatePostBapi
 ```
 
-This will create a new bapi class, with all the hooks and methods. You should delete everything
-you don't need.
+This will create a new bapi class, in the "app/Bapis" folder of your Laravel app, with all
+the hooks and methods. You should delete everything you don't need.
 
 The main business logic should go into the "handle" method. Business validations should go
 into the "validate" method and authorizations should go into the "authorize" method. There
