@@ -11,12 +11,11 @@ class BapiPackageServiceProvider extends ServiceProvider
 	
 	public function boot()
 	{
-		//dd("Service Provider Boot Method running...");
-		//if ($this->app->runningInConsole()) {
+		if ($this->app->runningInConsole()) {
 			$this->commands([
 				MakeBapi::class,
 				BapiTestCommand::class,
 			]);
-		//}
+		}
 	}
 }
