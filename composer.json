@@ -11,7 +11,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "illuminate/support": "^8"
+        "illuminate/support": "^8",
+        "illuminate/console": "^8"
     },
     "require-dev": {
         "orchestra/testbench": "6.x-dev"
@@ -20,7 +21,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "AntonioPrimera\\Bapi\\Providers\\ServiceProvider"
+                "AntonioPrimera\\Bapi\\Providers\\BapiPackageServiceProvider"
             ]
         }
     },
