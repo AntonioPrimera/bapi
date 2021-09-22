@@ -13,7 +13,7 @@ class DummyClass extends Bapi
      * @throws BapiException
      * @return bool
      */
-    protected function validateData()
+    protected function validateData() : bool
     {
         // Do any manual validations and throw an Exception or just return false (a BapiException will be thrown if
         // this method returns false). Return true if the validation was successful. Data provided to the Bapi
@@ -25,7 +25,7 @@ class DummyClass extends Bapi
     /**
      * Data preparation for Bapi run
      */
-    protected function prepareData()
+    protected function prepareData() : void
     {
         // Prepare the data for the Bapi. This method doesn't return anything. Anything you change or add,
         // you should add to the bapi instance. Magic getters and setters allow you to set any attribute
@@ -36,7 +36,7 @@ class DummyClass extends Bapi
      *
      * @return bool
      */
-    protected function authorize()
+    protected function authorize() : bool
     {
         // Return true for a successful authorization check or false to fail the authorization check.
         
@@ -92,7 +92,7 @@ class DummyClass extends Bapi
      *
      * @return mixed
      */
-    protected function afterHandle($result)
+    protected function afterHandle($result) : mixed
     {
         // Any post-bapi-run data processing goes here. The result of the handle method if received as
         // the $result parameter. Whatever you return here, will be the result returned by the bapi
