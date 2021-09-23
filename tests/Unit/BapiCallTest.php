@@ -106,7 +106,7 @@ class BapiCallTest extends \Orchestra\Testbench\TestCase
 		];
 		
 		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['prepareData']);
-		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['validateData']);
+		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['validate']);
 		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['beforeAuthorization']);
 		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['afterAuthorization']);
 		$this->assertArraysAreIdentical($expectedAttributes, $bapi->attributeLists['beforeHandle']);
@@ -126,7 +126,7 @@ class BapiCallTest extends \Orchestra\Testbench\TestCase
 		$this->assertCount(9, $bapi->methodCalls);
 		
 		$this->assertEquals('setup', 				$bapi->methodCalls[0]);
-		$this->assertEquals('validateData', 		$bapi->methodCalls[1]);
+		$this->assertEquals('validate',	 		$bapi->methodCalls[1]);
 		$this->assertEquals('prepareData', 		$bapi->methodCalls[2]);
 		$this->assertEquals('beforeAuthorization', $bapi->methodCalls[3]);
 		$this->assertEquals('authorize', 			$bapi->methodCalls[4]);

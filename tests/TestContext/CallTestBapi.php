@@ -52,10 +52,10 @@ class CallTestBapi extends Bapi
 		$this->methodCalls[] = 'prepareData';
 	}
 	
-	protected function validateData(): bool
+	protected function validate(): bool
 	{
-		$this->attributeLists['validateData'] = $this->attributes;
-		$this->methodCalls[] = 'validateData';
+		$this->attributeLists['validate'] = $this->attributes;
+		$this->methodCalls[] = 'validate';
 		
 		return strlen($this->msg) < 10;
 	}

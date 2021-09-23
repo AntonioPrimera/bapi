@@ -2,7 +2,8 @@
 namespace DummyNamespace;
 
 use AntonioPrimera\Bapi\Bapi;
-use AntonioPrimera\Bapi\Exceptions\BapiException;
+use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
+use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 
 class DummyClass extends Bapi
 {
@@ -10,15 +11,15 @@ class DummyClass extends Bapi
     /**
      * Business data validation
      *
-     * @throws BapiException
-     * @return bool
+     * @throws BapiValidationException
+     * @return bool | iterable | BapiValidationIssue
      */
-    protected function validateData() : bool
+    protected function validate() : bool | iterable | BapiValidationIssue
     {
-        // Do any manual validations and throw an Exception or just return false (a BapiException will be thrown if
-        // this method returns false). Return true if the validation was successful. Data provided to the Bapi
-        // should already be pre-validated. This method should be used for business specific validations.
-        
+        // Do any validations and return true or an empty array if everything is fine. If any issues occur, use
+        // BapiValidationIssue instances to describe the issues and return a BapiValidationIssue instance
+        // or a list of BapiValidationIssue instances. A BapiValidationException will be thrown.
+
         return true;
     }
     

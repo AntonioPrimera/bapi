@@ -71,7 +71,7 @@ setup method will always be called, if implemented.
 
 When you run your bapi, the following methods will be called, in exactly this order:
 
-1. validateData()
+1. validate()
 2. prepareData()
 3. beforeAuthorization()
 4. authorize()
@@ -189,6 +189,17 @@ complex and should be implemented together with the business logic, inside the B
 
 If there is any issue in the validation process, you can just return false from the
 ***validate()*** method, in which case, a simple BapiValidationException will be thrown.
+
+If there are one or more validation issues, and you want to send a proper response, informing
+the user about the issues, you can use **BapiValidationIssue** instances (described below).
+You can return a **BapiValidationIssue** instance, an array or collection of
+**BapiValidationInstances** from the ***validate()*** method, in which case, the Bapi
+will throw a new **BapiValidationException**, containing the issues returned by the
+***validate()*** method.
+
+If you want to take matters into your own hands, you can generate the **BapiValidationIssue**
+instances and throw a **BapiValidationException** containing these issues, from within the
+***validate()*** method.
 
 #### BapiValidationIssue and the BapiValidationException
 
