@@ -47,27 +47,27 @@ Import the bapi package through composer:
 An artisan command to create a new Bapi will be available after installing the package.
 
 For example, you can run the following artisan command in your console in order to create
-a new Bapi in "app/Bapis/Posts/CreatePostBapi.php":
+a new Bapi in **app/Bapis/Posts/CreatePostBapi.php**:
 
 ```bash
     php artisan make:bapi Posts/CreatePostBapi
 ```
 
-This will create a new bapi class, in the "app/Bapis" folder of your Laravel app, with all
+This will create a new bapi class, in the **app/Bapis** folder of your Laravel app, with all
 the hooks and methods. You should delete everything you don't need.
 
-The main business logic should go into the "handle" method. Business validations should go
-into the "validate" method and authorizations should go into the "authorize" method. There
-are plenty of other hooks in the run lifecycle of the Bapi, where you can write your business
-logic. I encourage you to use these hooks if necessary, rather than creating a huge "handle"
-method.
+The main business logic should go into the ***handle()*** method. Business validations should go
+into the ***validate()*** method and authorizations should go into the ***authorize()*** method.
+There are plenty of other hooks in the run lifecycle of the Bapi, where you can write your
+business logic. I encourage you to use these hooks if necessary, rather than creating a huge
+***handle()*** method.
 
 ### Implementing your Bapi & the Bapi run lifecycle
 
-Whenever you instantiate the bapi, the "setup" method is called, if implemented. By default,
-the setup method is not implemented. If you call the run method statically (check the chapter
-about running your bapi), an instance is created in the background, so the setup method
-will always be called, if implemented.
+Whenever you instantiate the bapi, the ***setup()*** method is called, if implemented. By
+default, the setup method is not implemented. If you call the run method statically (check
+the chapter about running your bapi), an instance is created in the background, so the
+setup method will always be called, if implemented.
 
 When you run your bapi, the following methods will be called, in exactly this order:
 
@@ -80,10 +80,10 @@ When you run your bapi, the following methods will be called, in exactly this or
 7. handle(...)
 8. afterHandle(mixed $handleResult)
 
-In the end, the result of the "afterHandle" method will be returned. The afterHandle method
-is implemented in the Bapi and by default, it just returns the result of the handle method.
-If you need, you can override the "afterHandle" method and change the result of the Bapi,
-before it is returned.
+In the end, the result of the ***afterHandle()*** method will be returned. The afterHandle
+method is implemented in the Bapi and by default, it just returns the result of the handle
+method. If you need, you can override the ***afterHandle()*** method and change the result
+of the Bapi, before it is returned.
 
 The arguments given to the bapi run method will be available throughout this entire lifecycle,
 directly on the Bapi instance, using the argument name from the handle method.
@@ -94,15 +94,15 @@ For example, if you want to call an UpdatePostBapi like this...
     UpdatePostBapi::run(Post $post, $title, $contents)
 ```
 
-...you will have to implement this method signature as your **handle** method, like this...
+...you will have to implement this method signature as your ***handle()*** method, like this...
 
 ```php
     protected function handle(Post $post, $title, $contents)
 ```
 
-...then, when running your bapi, via the **run** method, the three arguments provided will be
-available as instance attributes inside all the Bapi methods, and you could do something
-like this in any of the methods...
+...then, when running your bapi, via the ***run()*** method, the three arguments provided
+will be available as instance attributes inside all the Bapi methods, and you could do
+something like this in any of the methods...
 
 ```php
     return
@@ -112,11 +112,11 @@ like this in any of the methods...
 
 ### Running your Bapi
 
-You can call your bapi using the **run** method, either statically or as an instance method
+You can call your bapi using the ***run()*** method, either statically or as an instance method
 after instancing your bapi. The run method doesn't exist in the Bapi and you should not
 create a run method. This call is intercepted by the corresponding magic method and the bapi
-run lifecycle is started. DO NOT CREATE a **run** method in your bapi. The main business
-logic should go into the **handle** method.
+run lifecycle is started. DO NOT CREATE a ***run()*** method in your bapi. The main business
+logic should go into the ***handle()*** method.
 
 You can also invoke the Bapi if you prefer.
 
@@ -147,7 +147,7 @@ the business logic, you might want to do all necessary authorization checks in t
 Bapi and run the other Bapis inside, without an authorization check (it might be just a
 redundant check).
 
-If you want to skip the authorization check, you can call the **withoutAuthorizationCheck()**
+If you want to skip the authorization check, you can call the ***withoutAuthorizationCheck()***
 method either statically or as an instance method.
 
 For example, if you want to call the bapi in the previous example without running the
@@ -176,9 +176,78 @@ main benefit of the Bapis and might be better off using single file actions or j
 php classes, because these are easier to implement and understand, and they contain less
 magic.
 
-Although you might never use it, a **withAuthorizationCheck()** method is available and can
+Although you might never use it, a ***withAuthorizationCheck()*** method is available and can
 be called to re-enable the authorization check if it was disabled previously for a Bapi
 instance.
+
+### Validating the business data
+
+While the controllers are responsible to validate user input data, these validations are
+usually not enough for complex business processes. Business validations are usually more
+complex and should be implemented together with the business logic, inside the Bapi, in the
+**validate** method.
+
+If there is any issue in the validation process, you can just return false from the
+***validate()*** method, in which case, a simple BapiValidationException will be thrown.
+
+#### BapiValidationIssue and the BapiValidationException
+
+Whenever a Bapi validation issue occurs, you should generate a BapiValidationIssue instance,
+which you can pass on to the thrown BapiValidationException.
+
+Each BapiValidationIssue must contain the name of the attribute that generated the issue, its
+value and the issue that occurred, as an issue code (e.g. "AGE-LT-18") as free text message (
+e.g. "User is not of legal age!") or as a translation key (e.g. "exceptions.age.notLegal").
+
+```php
+    $bapiValidationIssue = new \AntonioPrimera\Bapi\Components\BapiValidationIssue(
+        'companyName',          //the name of the attribute at fault
+        'Amazon UK',            //the value of the attribute
+        'not-unique',           //the issue that occurred
+        'C:N:NU'                //optionally, an issue code
+    );
+```
+
+After generating one or more bapi validation issues, you can throw a BapiValidationException
+containing all these issues. The exception constructor can receive a single BapiValidationIssue
+or a list (array, Collection etc.) of BapiValidationIssues.
+
+```php
+    protected function validate()
+    {
+        $issues = [];
+        
+        //business validation - whether the company name is unique in the EU
+        if ($this->comapnyNameIsNotUnique($this->company->name))
+            $issues[] = new \AntonioPrimera\Bapi\Components\BapiValidationIssue(
+                'companyName',
+                $this->company->name,
+                'not-unique',
+                'C:N:NU'
+            );
+            
+        //business validation - whether the country is registered in the EU
+        if ($this->companyCountryNotValid($this->company->country))
+            $issues[] = new \AntonioPrimera\Bapi\Components\BapiValidationIssue(
+                'companyCountry',
+                $this->company->country,
+                'non-EU',
+                'C:C:NEU'
+            );
+        
+        //if any issues were found, throw a new BapiValidationException with these issues
+        if ($issues)
+            throw new \AntonioPrimera\Bapi\Exceptions\BapiValidationException($issues);
+    }
+```
+
+By using these Bapi Validation Issues and the BapiValidationException, you can render a proper
+response in the ***\App\Exceptions\Handler::register()*** method of your application.
+
+Another way to render a universal response for your business validation exceptions is to
+create a subclass of the BapiValidationException and implement the ***render()*** method. For
+this, you can check the **Laravel documentation** on **Error Handling**
+
 
 ## Known issues / quirks
 

@@ -2,6 +2,7 @@
 namespace AntonioPrimera\Bapi\Traits;
 
 use AntonioPrimera\Bapi\Exceptions\BapiException;
+use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 
@@ -17,6 +18,7 @@ trait HandlesExceptions
     protected array $throw = [
         AuthorizationException::class,
         BapiException::class,
+		BapiValidationException::class,
     ];
     
     /**

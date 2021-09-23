@@ -1,7 +1,7 @@
 <?php
 namespace AntonioPrimera\Bapi\Traits;
 
-use AntonioPrimera\Bapi\Exceptions\BapiException;
+use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 
 trait HandlesValidation
 {
@@ -26,12 +26,12 @@ trait HandlesValidation
     }
 	
 	/**
-	 * @throws BapiException
+	 * @throws BapiValidationException
 	 */
 	protected function handleValidationAndDataPreparation() : void
     {
         if (!$this->validateData())
-            throw new BapiException();
+            throw new BapiValidationException();
             
         $this->prepareData();
     }
