@@ -20,7 +20,7 @@ class Bapi
 {
     use HandlesAttributes, HandlesAuthorizationCheck, HandlesValidation, HandlesExceptions;
     
-    protected Authenticatable | null $actingAs;
+    protected Authenticatable | null $actor;
     
     public function __construct()
     {
@@ -187,14 +187,13 @@ class Bapi
 	 * currently authenticated user, but this can be changed by calling
 	 * this method and providing another Authenticatable instance
 	 *
-	 * @param Authenticatable $user
+	 * @param Authenticatable $actor
 	 *
 	 * @return $this
 	 */
-    public function actingAs(Authenticatable $user) : static
+    public function actingAs(?Authenticatable $actor) : static
     {
-        $this->actingAs = $user;
-        
+        $this->actor = new Actor($actor);
         return $this;
     }
 	
@@ -207,7 +206,10 @@ class Bapi
 	 */
     public function actor() : Authenticatable | null
     {
-        return $this->actingAs ?? auth()->user();
+    	if (!$this->actor)
+    		$this->actor = new Actor();
+    	
+        return $this->actor;
     }
     
     //--- Public hooks ------------------------------------------------------------------------------------------------
