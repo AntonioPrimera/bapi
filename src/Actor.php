@@ -10,6 +10,11 @@ use Illuminate\Contracts\Auth\Authenticatable;
  * The scope is to always have an actor instance, so we can determine if the actor is authenticated.
  *
  * This allows us to call: $this->actor()->isAuthenticated() inside our bapis.
+ *
+ * @property bool $isGuest
+ * @property bool $isAuthenticated
+ * @property Authenticatable|null $model
+ * @property Authenticatable|null $user
  */
 class Actor implements Authenticatable
 {
@@ -44,6 +49,15 @@ class Actor implements Authenticatable
 	 */
 	public function __get(string $name)
 	{
+		if ($name === 'isAuthenticated')
+			return $this->isAuthenticated();
+		
+		if ($name === 'isGuest')
+			return $this->isGuest();
+		
+		if ($name === 'model' || $name === 'user')
+			return $this->getModel();
+		
 		return $this->model?->$name;
 	}
 	

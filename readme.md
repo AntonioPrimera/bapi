@@ -259,6 +259,33 @@ Another way to render a universal response for your business validation exceptio
 create a subclass of the BapiValidationException and implement the ***render()*** method. For
 this, you can check the **Laravel documentation** on **Error Handling**
 
+### Authentication & Actors
+
+The BAPI uses an underlying `AntonioPrimera\Bapi\Actor` class to handle the authenticated actor.
+This class is a wrapper for the authenticated user and implements the Authenticatable interface. 
+It forwards all attribute handling and method calls to the underlying model (the authenticated user).
+
+It implements two useful methods: `isAuthenticated()` and `isGuest()`.
+
+The Bapi instance offers the public `actor()` method, which will lazily create an Actor instance,
+wrapping the authenticated user, so you can do something like this in your Bapi authorization
+method:
+
+```php
+protected function authorize()
+{
+    return $this->actor()->isAuthenticated()
+        && $this->can('some-action', $someModel);
+}
+```
+
+The Actor instance is sprinkled with some syntactic sugar:
+
+- you can retrieve the underlying model via `$actor->getModel()` method, as an attribute
+`$actor->model` or `$actor->user`
+- you can check whether there is an authenticated actor via `$actor->isGuest()` and
+`$actor->isAuthenticated()` methods, or via attributes with the same names `$actor->isGuest`
+and `$actor->isAuthenticated`
 
 ## Known issues / quirks
 
