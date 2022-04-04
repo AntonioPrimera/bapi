@@ -20,7 +20,7 @@ class Bapi
 {
     use HandlesAttributes, HandlesAuthorizationCheck, HandlesValidation, HandlesExceptions;
     
-    protected Authenticatable | null $actor;
+    protected Authenticatable | null $actor = null;
     
     public function __construct()
     {
@@ -201,10 +201,8 @@ class Bapi
 	 * Return the actor for the current bapi. If not specified
 	 * using the actingAs method, the actor/user which is
 	 * currently authenticated will be returned
-	 *
-	 * @return Authenticatable|null
 	 */
-    public function actor() : Authenticatable | null
+    public function actor() : Actor | Authenticatable | null
     {
     	if (!$this->actor)
     		$this->actor = new Actor();

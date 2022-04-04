@@ -76,6 +76,6 @@ trait HandlesAuthorizationCheck
 	 */
     protected function can(string $ability, mixed $arguments = []): bool
 	{
-        return Gate::forUser($this->actor())->allows($ability, $arguments);
+        return Gate::forUser($this->actor()->getModel())->allows($ability, $arguments);
     }
 }
