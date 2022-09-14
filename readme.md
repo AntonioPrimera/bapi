@@ -53,8 +53,21 @@ a new Bapi in **app/Bapis/Posts/CreatePostBapi.php**:
     php artisan make:bapi Posts/CreatePostBapi
 ```
 
-This will create a new bapi class, in the **app/Bapis** folder of your Laravel app, with all
-the hooks and methods. You should delete everything you don't need.
+This will create a new basic bapi class, in the **app/Bapis** folder of your Laravel app. If you 
+wish to create a complex bapi class, with all the hooks and methods, you should use the `--full`
+flag on the command above. If you want to always create complex bapi classes for your project,
+without always using the `--full` flag, you can add the following setting to your .env file:
+
+```dotenv
+BAPI_GENERATOR_COMPLEX_BAPIS=true
+```
+
+By default, the base Bapi class, inherited by the generated Bapis is `AntonioPrimera\Bapi\Bapi`.
+If you have another base class in your project, you can add it to your .env file like so:
+
+```dotenv
+BAPI_GENERATOR_BASE_CLASS="App\\Bapis\\Bapi"
+```
 
 The main business logic should go into the ***handle()*** method. Business validations should go
 into the ***validate()*** method and authorizations should go into the ***authorize()*** method.
