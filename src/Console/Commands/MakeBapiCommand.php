@@ -12,7 +12,7 @@ class MakeBapiCommand extends FileGeneratorCommand
 	{
 		return [
 			'Bapi File' => [
-				'stub' => __DIR__ . '/stubs/BapiStub.stub',
+				'stub' => __DIR__ . '/stubs/BapiStub.php.stub',
 				'path' => 'Bapis',
 				'rootNamespace' => 'App\\Bapis',
 				'replace' => [
