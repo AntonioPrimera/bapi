@@ -1,11 +1,11 @@
 <?php
-namespace DummyNamespace;
+namespace DUMMY_NAMESPACE;
 
 use BAPI_BASE_CLASS;
 use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 
-class DummyClass extends Bapi
+class DUMMY_CLASS extends Bapi
 {
     
     /**
