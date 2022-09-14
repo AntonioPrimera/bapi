@@ -2,7 +2,7 @@
 
 namespace AntonioPrimera\Bapi\Providers;
 
-use AntonioPrimera\Bapi\Console\Commands\MakeBapi;
+use AntonioPrimera\Bapi\Console\Commands\OLDMakeBapi;
 use Illuminate\Support\ServiceProvider;
 
 class BapiPackageServiceProvider extends ServiceProvider
@@ -12,7 +12,7 @@ class BapiPackageServiceProvider extends ServiceProvider
 	{
 		if ($this->app->runningInConsole()) {
 			$this->commands([
-				MakeBapi::class,
+				OLDMakeBapi::class,
 			]);
 		}
 	}

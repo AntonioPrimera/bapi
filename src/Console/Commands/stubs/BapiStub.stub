@@ -1,7 +1,7 @@
 <?php
 namespace DummyNamespace;
 
-use AntonioPrimera\Bapi\Bapi;
+use BAPI_BASE_CLASS;
 use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 
