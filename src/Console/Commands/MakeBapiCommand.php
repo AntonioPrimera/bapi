@@ -18,7 +18,7 @@ class MakeBapiCommand extends FileGeneratorCommand
 			'complex' => __DIR__ . '/stubs/BapiStubComplex.php.stub'
 		];
 		
-		$shouldGenerateComplexBapi = $this->hasOption('full')
+		$shouldGenerateComplexBapi = $this->option('full')
 			|| env('BAPI_GENERATOR_COMPLEX_BAPIS', false);
 		
 		$stubFile = $shouldGenerateComplexBapi
