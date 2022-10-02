@@ -2,12 +2,17 @@
 namespace AntonioPrimera\Bapi\Console\Commands;
 
 use AntonioPrimera\Artisan\FileGeneratorCommand;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 class MakeBapiCommand extends FileGeneratorCommand
 {
 	protected $signature = "make:bapi
 		{name : The name of the bapi file, including the relative folder structure}
-		{--full : Whether to generate a complex bapi class, with all available methods and hooks (by default it generates a simple bapi class)}";
+		{--full : Whether to generate a complex bapi class, with all available methods and hooks (by default it generates a simple bapi class)}
+		{--t} : Whether to also generate a test for the bapi (a default named unit test will be generated under tests/Unit/Bapis/BapiNameTest.php)
+		{--test=} : Whether to generate a unit test with the given name and the given path"
+	;
 	
 	protected $description = "Create a new Bapi class file in: app/Bapis/";
 	
@@ -35,5 +40,26 @@ class MakeBapiCommand extends FileGeneratorCommand
 				]
 			],
 		];
+	}
+	
+	protected function afterFileCreation(bool $isDryRun, array $createdFiles, array $recipe)
+	{
+		if ($this->option('test')) {
+			Artisan::call('make:test', [
+				'name' => $this->option('test') . (str_ends_with($this->option('test'), 'Test') ? '' : 'Test'),
+				'-u' => true
+			]);
+			
+			return;
+		}
+		
+		if ($this->option('t') || env('BAPI_GENERATOR_TDD', false)) {
+			Artisan::call('make:test', [
+				'name' => 'Bapis/' . $this->argument('name') . 'Test',
+				'-u' => true
+			]);
+			
+			return;
+		}
 	}
 }

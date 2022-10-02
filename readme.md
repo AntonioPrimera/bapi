@@ -50,7 +50,7 @@ For example, you can run the following artisan command in your console in order 
 a new Bapi in **app/Bapis/Posts/CreatePostBapi.php**:
 
 ```bash
-    php artisan make:bapi Posts/CreatePostBapi
+php artisan make:bapi Posts/CreatePostBapi
 ```
 
 This will create a new basic bapi class, in the **app/Bapis** folder of your Laravel app. If you 
@@ -74,6 +74,32 @@ into the ***validate()*** method and authorizations should go into the ***author
 There are plenty of other hooks in the run lifecycle of the Bapi, where you can write your
 business logic. I encourage you to use these hooks if necessary, rather than creating a huge
 ***handle()*** method.
+
+### TDD: creating a test file for your BAPI
+
+You have several options to let the `make:bapi` command create a unit test for your new bapi:
+
+1. If you just want a simple test created, add the `--t` option to your command. The following
+example will create the test file `test/Unit/Bapis/Posts/CreatePostBapiTest.php`:
+
+```bash
+php artisan make:bapi Posts/CreatePostBapi --t
+```
+
+2. If you want to take control over the path and name of your unit test, you can add the
+`--test=TestPath/AndName` option your command. The following example will create the test file
+`test/Unit/Posts/CreatePostBasicTest.php`.
+
+```bash
+php artisan make:bapi Posts/CreatePostBapi --test Posts/CreatePostBapiBasicTest
+```
+
+3. If you always want to create a simple, default test for all your bapis, you can add the following
+entry in your `.env` file, which will act like adding `--t` to all your `make:bapi` commands:
+
+```dotenv
+BAPI_GENERATOR_TDD=true
+```
 
 ### Implementing your Bapi & the Bapi run lifecycle
 
