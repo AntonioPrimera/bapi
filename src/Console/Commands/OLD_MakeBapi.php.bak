@@ -4,7 +4,7 @@ namespace AntonioPrimera\Bapi\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 
-class MakeBapi extends GeneratorCommand
+class OLD_MakeBapi extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.

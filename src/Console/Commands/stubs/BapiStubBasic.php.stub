@@ -1,0 +1,45 @@
+<?php
+namespace DUMMY_NAMESPACE;
+
+use BAPI_BASE_CLASS;
+use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
+use AntonioPrimera\Bapi\Components\BapiValidationIssue;
+
+class DUMMY_CLASS extends Bapi
+{
+    
+    /**
+     * Business data validation
+     * @throws BapiValidationException
+     */
+    protected function validate() : bool | iterable | BapiValidationIssue
+    {
+        // Do any validations and return true or an empty array if everything is fine. If any issues occur, use
+        // BapiValidationIssue instances to describe the issues and return a BapiValidationIssue instance
+        // or a list of BapiValidationIssue instances. A BapiValidationException will be thrown.
+
+        return true;
+    }
+    
+    /**
+     * Authorization check
+     */
+    protected function authorize() : bool
+    {
+        // Return true for a successful authorization check or false to fail the authorization check.
+        
+        return false;
+    }
+    
+    /**
+     * !!!
+     * !!!   Don't forget to update this comment:
+     * !!!      - explain what the bapi does
+     * !!!      - add thrown exceptions
+     * !!!
+     */
+    public function handle()
+    {
+        // Add your business logic here
+    }
+}
