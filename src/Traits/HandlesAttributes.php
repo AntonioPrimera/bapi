@@ -1,7 +1,6 @@
 <?php
 namespace AntonioPrimera\Bapi\Traits;
 
-
 use Illuminate\Support\Arr;
 
 trait HandlesAttributes
@@ -14,16 +13,6 @@ trait HandlesAttributes
 	{
 		return $this->attributes;
 	}
-	
-	//public function only($keys)
-	//{
-	//    return Arr::only($this->attributes, is_array($keys) ? $keys : func_get_args());
-	//}
-	//
-	//public function except($keys)
-	//{
-	//    return Arr::except($this->attributes, is_array($keys) ? $keys : func_get_args());
-	//}
 	
 	public function has($key) : bool
 	{
@@ -53,10 +42,6 @@ trait HandlesAttributes
 	/**
 	 * Merge the given list of attributes into
 	 * the current list of attributes
-	 *
-	 * @param array $attributes
-	 *
-	 * @return $this
 	 */
     public function fill(array $attributes) : static
     {
@@ -68,18 +53,20 @@ trait HandlesAttributes
 	 * Fill in a set of given values, provided as an indexed
 	 * array (numerical keys) into the corresponding
 	 * attributes with the same indices
-     *
-     * @param array $values
-     *
-     * @return $this
      */
     public function fillValues(array $values) : static
     {
-        $valueIndex = 0;
-        foreach ($this->attributes as $attribute => $defaultValue) {
-            $this->set($attribute, $values[$valueIndex] ?? $defaultValue);
-            $valueIndex++;
-        }
+		$valueIndex = 0;
+		foreach ($this->attributes as $attributeName => $defaultValue) {
+			if (isset($values[$attributeName])) {
+				//named attributes will have the argument name as key
+				$this->set($attributeName, $values[$attributeName]);
+			} else {
+				//indexed attributes must have the same index as the method argument (can not be skipped)
+				$this->set($attributeName, $values[$valueIndex] ?? $defaultValue);
+				$valueIndex++;
+			}
+		}
         
         return $this;
     }
