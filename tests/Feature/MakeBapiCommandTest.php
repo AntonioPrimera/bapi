@@ -1,7 +1,5 @@
 <?php
-
 namespace AntonioPrimera\Bapi\Tests\Feature;
-
 
 use AntonioPrimera\Bapi\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;

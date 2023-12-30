@@ -33,7 +33,7 @@ class MakeBapiCommand extends FileGeneratorCommand
 		return [
 			'Bapi File' => [
 				'stub' => $stubFile,
-				'path' => 'Bapis',
+				'target' => app_path('Bapis'),
 				'rootNamespace' => 'App\\Bapis',
 				'replace' => [
 					'BAPI_BASE_CLASS' => env('BAPI_GENERATOR_BASE_CLASS', 'AntonioPrimera\\Bapi\\Bapi'),
@@ -42,7 +42,7 @@ class MakeBapiCommand extends FileGeneratorCommand
 		];
 	}
 	
-	protected function afterFileCreation(bool $isDryRun, array $createdFiles, array $recipe)
+	protected function afterFileCreation()
 	{
 		if ($this->option('test')) {
 			Artisan::call('make:test', [
