@@ -2,15 +2,12 @@
 namespace AntonioPrimera\Bapi;
 
 use AntonioPrimera\Bapi\Exceptions\BapiException;
-use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use AntonioPrimera\Bapi\Traits\HandlesAttributes;
 use AntonioPrimera\Bapi\Traits\HandlesAuthorization;
 use AntonioPrimera\Bapi\Traits\HandlesExceptions;
 use AntonioPrimera\Bapi\Traits\HandlesValidation;
 use Exception;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 use ReflectionMethod;
 
 /**
@@ -27,12 +24,6 @@ class Bapi
 		//make sure the bapi has a "handle" method
 		if (!method_exists($this, 'handle'))
 			throw new BapiException('Bapi must have a "handle" method', 0);
-		
-        //take the arguments given to the constructor and store them into the attributes array of the bapi
-		//the keys (names) of the attributes will be determined via Reflection from the "handle" method
-		//make sure to instantiate the bapi with exactly the same arguments as the "handle" method
-        //$args = func_num_args() > 0 ? func_get_args() : [];
-        //$this->resolveConstructorArguments(...$args);
     }
     
     //--- Magic stuff -------------------------------------------------------------------------------------------------
