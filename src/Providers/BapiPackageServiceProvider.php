@@ -1,5 +1,4 @@
 <?php
-
 namespace AntonioPrimera\Bapi\Providers;
 
 use AntonioPrimera\Bapi\Console\Commands\MakeBapiCommand;

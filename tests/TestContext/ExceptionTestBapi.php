@@ -4,10 +4,13 @@ namespace AntonioPrimera\Bapi\Tests\TestContext;
 
 use Exception;
 
+/**
+ * @method static array run(Exception|null $exception)
+ */
 class ExceptionTestBapi extends \AntonioPrimera\Bapi\Bapi
 {
 	
-	protected function handle(?\Exception $exception)
+	protected function handle(\Exception|null $exception)
 	{
 		if ($exception)
 			throw $exception;

@@ -152,15 +152,6 @@ class MakeBapiCommandTest extends TestCase
 	
 	protected function cleanupTestFile(string $fileName)
 	{
-		//$fileName = base_path(
-		//	'tests/'
-		//	. ($unit ? 'Unit' : 'Feature')
-		//	. '/'
-		//	. $filePath
-		//	. (str_ends_with($filePath, 'Test') ? '' : 'Test')
-		//	. '.php'
-		//);
-		
 		if (File::exists($fileName)) {
 			unlink($fileName);
 		}

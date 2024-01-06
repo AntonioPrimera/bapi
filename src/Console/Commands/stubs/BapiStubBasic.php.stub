@@ -7,36 +7,41 @@ use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 
 class DUMMY_CLASS extends Bapi
 {
-    
+
+    /**
+	 * Authorization check
+	 */
+	protected function authorize() : bool
+	{
+		// Return boolean true for a successful authorization check or false to fail the authorization check.
+		// Delete this method if you don't need authorization checks (not recommended)
+
+		// You may use the $this->actor() method to get the actor object and check it's properties
+		// You may also use the $this->can('ability', ...$args) method to call the corresponding Policy method
+
+		return false;
+	}
+
     /**
      * Business data validation
      * @throws BapiValidationException
      */
-    protected function validate() : bool | iterable | BapiValidationIssue
+    protected function validate() : mixed
     {
-        // Do any validations and return true or an empty array if everything is fine. If any issues occur, use
-        // BapiValidationIssue instances to describe the issues and return a BapiValidationIssue instance
-        // or a list of BapiValidationIssue instances. A BapiValidationException will be thrown.
+        // Do any business specific validations. If the validation is successful, return boolean true
+		// Any other result will be wrapped in a BapiValidationException and thrown. You may use
+		// BapiValidationIssue objects to return validation issues for specific attributes
+		// You may also throw a BapiValidationException manually, if you want to.
 
         return true;
     }
     
     /**
-     * Authorization check
-     */
-    protected function authorize() : bool
-    {
-        // Return true for a successful authorization check or false to fail the authorization check.
-        
-        return false;
-    }
-    
-    /**
-     * !!!
-     * !!!   Don't forget to update this comment:
-     * !!!      - explain what the bapi does
-     * !!!      - add thrown exceptions
-     * !!!
+     * Add the business logic here and the necessary arguments, which will be passed to the bapi 'run' method
+	 * The arguments will be made accessible as $this->argumentName inside the bapi, so you can use them
+	 * in your business logic, during validation and authorization.
+	 *
+	 * Starting from version BAPI v3.0, the run method only accepts named arguments, for better consistency.
      */
     public function handle()
     {

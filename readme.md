@@ -1,14 +1,40 @@
 # BAPI - Business API
 
-## Scope
+BAPI stands for Business API and is like an Action on steroids:
 
-The scope of a BAPI is to encapsulate the business logic and to create reliable,
-self-contained pieces of business functionality.
+- It encapsulates the **business logic** of your application and makes it reusable and testable.
+- It ensures data consistency, by using **database transactions**.
+- It allows you to do **authorization checks** before actually running the business logic.
+- It allows you to do **business validations** before actually running the business logic.
+- It encapsulates **best practices** for handling the business logic of your application.
+- BAPIs are **self-contained** and **reusable** bits of business logic.
 
-The difference between application logic and business logic is that while the application
-logic deals with how the application works and interacts with the user (Controllers, Actions,
-Routes, Front-End, UI, UX etc.), the business logic makes sure that the workflows specific
-to the application are run in a reliable way.
+Just to clarify:
+
+- business logic is the logic specific to your application. For example, if you
+create an application where you handle car inventory, the business logic would be the logic
+specific to cars, inventory, reporting on inventory, car manufacturers etc.
+- business validation is different from user input validation. User input validation is
+making sure that the user input is valid (e.g. the email is a valid email). Business
+validation is making sure that the data makes sense in the context of the problem you are
+trying to solve (e.g. the car parts are compatible with the car model).
+
+For example a BAPI for adding a car part to the inventory would be called like this:
+
+```php
+AddCarPartToInventoryBapi::run(
+    partCategory: $category,
+    partType: $type,
+    partManufacturer: $manufacturer,
+    carMake: $make,
+    carModel: $model,
+    carYear: $year,
+    storage: $storageToBeAddedTo,
+);
+```
+
+The BAPIs are not meant to replace the controllers, but to be used by the controllers and other
+methods handling the business logic of your application (e.g. Livewire forms, Jobs, Commands etc.).
 
 ## Why BAPIs?
 
@@ -19,18 +45,6 @@ In order to be able to rely on the previously written bits of business logic whe
 them in a more complex workflow (a list of steps), you should split them into atomic, reusable
 business steps and make sure they are thoroughly tested. Each such step can be implemented in
 a dedicated BAPI.
-
-For example, in the case of a blog, a more complex flow would be to create a new blog post with
-some media files, which have to be uploaded and checked by an admin.
-During this flow, you would:
-1. create the actual post (BAPI: CreateBlogPostBapi)
-2. upload and link the media files (BAPI: UploadAndLinkPostMediaBapi)
-3. check the post for flags like foul language (BAPI: CheckPostContentsBapi)
-4. create a notification for an admin to check this blog post (BAPI: NotifyAdminBapi)
-5. create notifications for all users who follow the thread (BAPI: NotifyThreadFollowersBapi)
-
-Of course this is just to exemplify how you could split your business logic into BAPIs. You can
-also implement such a functionality in other ways, with or without BAPIs.
 
 ## Usage
 
@@ -53,14 +67,21 @@ a new Bapi in **app/Bapis/Posts/CreatePostBapi.php**:
 php artisan make:bapi Posts/CreatePostBapi
 ```
 
+### Advanced Bapi generation
+
+#### Always create complex Bapis
 This will create a new basic bapi class, in the **app/Bapis** folder of your Laravel app. If you 
-wish to create a complex bapi class, with all the hooks and methods, you should use the `--full`
-flag on the command above. If you want to always create complex bapi classes for your project,
-without always using the `--full` flag, you can add the following setting to your .env file:
+wish to create a slightly more complex bapi class, with all the hooks and methods, you should use
+the `--full` flag on the command above.
+
+If you want to always create complex bapi classes for your project, without always using the 
+`--full` flag every time, you can add the following setting to your .env file:
 
 ```dotenv
 BAPI_GENERATOR_COMPLEX_BAPIS=true
 ```
+
+#### Custom base class to be inherited by the generated Bapis
 
 By default, the base Bapi class, inherited by the generated Bapis is `AntonioPrimera\Bapi\Bapi`.
 If you have another base class in your project, you can add it to your .env file like so:
@@ -69,32 +90,26 @@ If you have another base class in your project, you can add it to your .env file
 BAPI_GENERATOR_BASE_CLASS="App\\Bapis\\Bapi"
 ```
 
-The main business logic should go into the ***handle()*** method. Business validations should go
-into the ***validate()*** method and authorizations should go into the ***authorize()*** method.
-There are plenty of other hooks in the run lifecycle of the Bapi, where you can write your
-business logic. I encourage you to use these hooks if necessary, rather than creating a huge
-***handle()*** method.
-
-### TDD: creating a test file for your BAPI
+#### TDD: create a test file for your BAPI
 
 You have several options to let the `make:bapi` command create a unit test for your new bapi:
 
-1. If you just want a simple test created, add the `--t` option to your command. The following
+- If you just want a simple test created, add the `--t` option to your command. The following
 example will create the test file `test/Unit/Bapis/Posts/CreatePostBapiTest.php`:
 
 ```bash
 php artisan make:bapi Posts/CreatePostBapi --t
 ```
 
-2. If you want to take control over the path and name of your unit test, you can add the
-`--test=TestPath/AndName` option your command. The following example will create the test file
+- If you want to take control over the path and name of your unit test, you can add the
+`--test TestPath/AndName` option your command. The following example will create the test file
 `test/Unit/Posts/CreatePostBasicTest.php`.
 
 ```bash
 php artisan make:bapi Posts/CreatePostBapi --test Posts/CreatePostBapiBasicTest
 ```
 
-3. If you always want to create a simple, default test for all your bapis, you can add the following
+- If you always want to create a simple, default test for all your bapis, you can add the following
 entry in your `.env` file, which will act like adding `--t` to all your `make:bapi` commands:
 
 ```dotenv
@@ -110,38 +125,29 @@ setup method will always be called, if implemented.
 
 When you run your bapi, the following methods will be called, in exactly this order:
 
-1. validate()
-2. prepareData()
-3. beforeAuthorization()
-4. authorize()
-5. afterAuthorization()
-6. beforeHandle()
-7. handle(...)
-8. afterHandle(mixed $handleResult)
+1. authorize()
+2. validate()
+3. handle(...)
+4. processResult(mixed $result): mixed
 
-In the end, the result of the ***afterHandle()*** method will be returned. The afterHandle
-method is implemented in the Bapi and by default, it just returns the result of the handle
-method. If you need, you can override the ***afterHandle()*** method and change the result
-of the Bapi, before it is returned.
-
-The arguments given to the bapi run method will be available throughout this entire lifecycle,
-directly on the Bapi instance, using the argument name from the handle method.
+The arguments provided when calling the BAPI **run** method **must be named arguments** and will be
+available throughout the entire lifecycle, directly on the Bapi instance, using the argument
+name from the handle method.
 
 For example, if you want to call an UpdatePostBapi like this...
 
 ```php
-    UpdatePostBapi::run(Post $post, $title, $contents)
+    UpdatePostBapi::run(post: $post, title: $title, contents: $contents)
 ```
 
-...you will have to implement this method signature as your ***handle()*** method, like this...
+...your ***handle()*** method, must look something like this...
 
 ```php
     protected function handle(Post $post, $title, $contents)
 ```
 
-...then, when running your bapi, via the ***run()*** method, the three arguments provided
-will be available as instance attributes inside all the Bapi methods, and you could do
-something like this in any of the methods...
+...then, when running your bapi, via the ***run()*** method, the arguments will be available
+as instance attributes inside all the Bapi methods, so you can use them like this...
 
 ```php
     return
@@ -149,12 +155,18 @@ something like this in any of the methods...
         && $this->post->contents === $this->contents;
 ```
 
+In the end, the result of the ***handle()*** method will be provided as an argument to the
+***processResult()*** method, which allows you to do any transformations and post-processing
+of the result. The return value of the ***processResult()*** method will be returned by the
+BAPI ***run(...)*** method. If you need, you can override the ***processResult()*** method
+and change the result of the Bapi, before it is returned.
+
 ### Running your Bapi
 
 You can call your bapi using the ***run()*** method, either statically or as an instance method
 after instancing your bapi. The run method doesn't exist in the Bapi and you should not
 create a run method. This call is intercepted by the corresponding magic method and the bapi
-run lifecycle is started. DO NOT CREATE a ***run()*** method in your bapi. The main business
+run lifecycle is started. **DO NOT CREATE a run() method** in your bapi. The main business
 logic should go into the ***handle()*** method.
 
 You can also invoke the Bapi if you prefer.
@@ -201,11 +213,11 @@ authorization check, you could do the following:
 ```php
     //instance method call
     $updatePostBapi = new UpdatePostBapi();
-    $updatePostBapi->withoutAuthorizationCheck()
-        ->run($post, 'New title', 'Some contents');
+    $updatePostBapi->withoutAuthorizationCheck();
+    $updatePostBapi->run($post, 'New title', 'Some contents');
 ```
 
-While this is possible, it is very risky, because Bapis should be atomic bits and pieces
+While this is possible, it is risky, because Bapis should be atomic bits and pieces
 of code and should be completely independent. Thus, if a bapi calls other Bapis, which in
 turn call other Bapis and so on, it will be hard to ensure that every bapi covers all
 necessary authorization checks. This also rises the risk for duplicated authorization logic.
@@ -226,19 +238,10 @@ usually not enough for complex business processes. Business validations are usua
 complex and should be implemented together with the business logic, inside the Bapi, in the
 **validate** method.
 
-If there is any issue in the validation process, you can just return false from the
-***validate()*** method, in which case, a simple BapiValidationException will be thrown.
+If the validation passes, the ***validate()*** method must return boolean true. Any other
+return value, will be wrapped in a BapiValidationException, which will be thrown.
 
-If there are one or more validation issues, and you want to send a proper response, informing
-the user about the issues, you can use **BapiValidationIssue** instances (described below).
-You can return a **BapiValidationIssue** instance, an array or collection of
-**BapiValidationInstances** from the ***validate()*** method, in which case, the Bapi
-will throw a new **BapiValidationException**, containing the issues returned by the
-***validate()*** method.
-
-If you want to take matters into your own hands, you can generate the **BapiValidationIssue**
-instances and throw a **BapiValidationException** containing these issues, from within the
-***validate()*** method.
+You can also throw a BapiValidationException directly from the ***validate()*** method.
 
 #### BapiValidationIssue and the BapiValidationException
 
@@ -258,9 +261,9 @@ e.g. "User is not of legal age!") or as a translation key (e.g. "exceptions.age.
     );
 ```
 
-After generating one or more bapi validation issues, you can throw a BapiValidationException
-containing all these issues. The exception constructor can receive a single BapiValidationIssue
-or a list (array, Collection etc.) of BapiValidationIssues.
+After generating one or more bapi validation issues, you can either throw a
+new BapiValidationException with these issues, or you can return an array of
+BapiValidationIssue instances from the ***validate()*** method.
 
 ```php
     protected function validate()
@@ -300,51 +303,13 @@ this, you can check the **Laravel documentation** on **Error Handling**
 
 ### Authentication & Actors
 
-The BAPI uses an underlying `AntonioPrimera\Bapi\Actor` class to handle the authenticated actor.
-This class is a wrapper for the authenticated user and implements the Authenticatable interface. 
-It forwards all attribute handling and method calls to the underlying model (the authenticated user).
-
-It implements two useful methods: `isAuthenticated()` and `isGuest()`.
-
-The Bapi instance offers the public `actor()` method, which will lazily create an Actor instance,
-wrapping the authenticated user, so you can do something like this in your Bapi authorization
-method:
+The Bapi instance offers the public `actor()` method, which is just a wrapper for the
+`Auth::user()` method. 
 
 ```php
 protected function authorize()
 {
-    return $this->actor()->isAuthenticated()
+    return $this->actor() 
         && $this->can('some-action', $someModel);
 }
 ```
-
-The Actor instance is sprinkled with some syntactic sugar:
-
-- you can retrieve the underlying model via `$actor->getModel()` method, as an attribute
-`$actor->model` or `$actor->user`
-- you can check whether there is an authenticated actor via `$actor->isGuest()` and
-`$actor->isAuthenticated()` methods, or via attributes with the same names `$actor->isGuest`
-and `$actor->isAuthenticated`
-
-## Known issues / quirks
-
-### 1. Arguments given to the constructor
-
-When you instantiate a bapi, all arguments of the handle method are made available as
-instance attributes and their values are either null or their default values from the
-method signature.
-
-During the constructor and the **setup()** method, called in the constructor, these values are
-available (because the bapi was not yet called with the actual data).
-
-**The issue:**
-
-If you provide any arguments to the constructor, these will be assigned to the
-instance attributes corresponding to the **handle(...)** method (based on their order),
-without doing any type checks.
-
-**Solutions / Workarounds:**
-
-1. Do not provide any arguments to the constructor
-2. OR override the constructor and give it the same signature as the handle method
-3. OR do not use these attributes in the **setup()** method if you have one

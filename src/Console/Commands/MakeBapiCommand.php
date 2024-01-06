@@ -3,7 +3,6 @@ namespace AntonioPrimera\Bapi\Console\Commands;
 
 use AntonioPrimera\Artisan\FileGeneratorCommand;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Str;
 
 class MakeBapiCommand extends FileGeneratorCommand
 {

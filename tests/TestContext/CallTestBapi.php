@@ -41,29 +41,12 @@ class CallTestBapi extends Bapi
 	
 	//--- Hooks -------------------------------------------------------------------------------------------------------
 	
-	protected function setup()
-	{
-		$this->methodCalls[] = 'setup';
-	}
-	
-	protected function prepareData(): void
-	{
-		$this->attributeLists['prepareData'] = $this->attributes;
-		$this->methodCalls[] = 'prepareData';
-	}
-	
 	protected function validate(): bool
 	{
 		$this->attributeLists['validate'] = $this->attributes;
 		$this->methodCalls[] = 'validate';
 		
 		return strlen($this->msg) < 10;
-	}
-	
-	protected function beforeAuthorization()
-	{
-		$this->attributeLists['beforeAuthorization'] = $this->attributes;
-		$this->methodCalls[] = 'beforeAuthorization';
 	}
 	
 	protected function authorize()
@@ -74,25 +57,13 @@ class CallTestBapi extends Bapi
 		return true;
 	}
 	
-	protected function afterAuthorization()
+	protected function processResult($result): mixed
 	{
-		$this->attributeLists['afterAuthorization'] = $this->attributes;
-		$this->methodCalls[] = 'afterAuthorization';
-	}
-	
-	protected function beforeHandle()
-	{
-		$this->attributeLists['beforeHandle'] = $this->attributes;
-		$this->methodCalls[] = 'beforeHandle';
-	}
-	
-	protected function afterHandle($result): mixed
-	{
-		$this->attributeLists['afterHandle'] = $this->attributes;
-		$this->methodCalls[] = 'afterHandle';
+		$this->attributeLists['processResult'] = $this->attributes;
+		$this->methodCalls[] = 'processResult';
 		
 		if ($this->msg === 'AHC')
-			$result['afterHandleChanges'] = true;
+			$result['processResultChanges'] = true;
 		
 		return $result;
 	}

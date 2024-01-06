@@ -7,49 +7,42 @@ use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 
 class DUMMY_CLASS extends Bapi
 {
-    
+
     /**
-     * Business data validation
-     *
+	 * Authorization check
+	 */
+	protected function authorize() : bool
+	{
+		// Return boolean true for a successful authorization check or false to fail the authorization check.
+		// Delete this method if you don't need authorization checks (not recommended)
+
+		// You may use the $this->actor() method to get the actor object and check it's properties
+		// You may also use the $this->can('ability', ...$args) method to call the corresponding Policy method
+
+		return false;
+	}
+
+
+    /**
+     * Business data validation.
      * @throws BapiValidationException
-     * @return bool | iterable | BapiValidationIssue
      */
-    protected function validate() : bool | iterable | BapiValidationIssue
+    protected function validate() : mixed
     {
-        // Do any validations and return true or an empty array if everything is fine. If any issues occur, use
-        // BapiValidationIssue instances to describe the issues and return a BapiValidationIssue instance
-        // or a list of BapiValidationIssue instances. A BapiValidationException will be thrown.
+        // Do any business specific validations. If the validation is successful, return boolean true
+        // Any other result will be wrapped in a BapiValidationException and thrown. You may use
+        // BapiValidationIssue objects to return validation issues for specific attributes
+        // You may also throw a BapiValidationException manually, if you want to.
 
         return true;
     }
     
     /**
-     * Data preparation for Bapi run
-     */
-    protected function prepareData() : void
-    {
-        // Prepare the data for the Bapi. This method doesn't return anything. Anything you change or add,
-        // you should add to the bapi instance. Magic getters and setters allow you to set any attribute
-    }
-    
-    /**
-     * Authorization check
+     * Add the business logic here and the necessary arguments, which will be passed to the bapi 'run' method
+     * The arguments will be made accessible as $this->argumentName inside the bapi, so you can use them
+     * in your business logic, during validation and authorization.
      *
-     * @return bool
-     */
-    protected function authorize() : bool
-    {
-        // Return true for a successful authorization check or false to fail the authorization check.
-        
-        return false;
-    }
-    
-    /**
-     * !!!
-     * !!!   Don't forget to update this comment:
-     * !!!      - explain what the bapi does
-     * !!!      - add the parameters, thrown exceptions and return type
-     * !!!
+     * Starting from version BAPI v3.0, the run method only accepts named arguments, for better consistency.
      */
     public function handle()
     {
@@ -59,41 +52,10 @@ class DUMMY_CLASS extends Bapi
     //--- Available Hooks ---------------------------------------------------------------------------------------------
     
     /**
-     * Hook - run before the authorization check
+     * Hook: After the handle method is executed, the result is passed to this method, which can process it and
+     * return it. If you don't want to post-process the result, just remove this hook.
      */
-    protected function beforeAuthorization()
-    {
-        // This method will run just before the authorization.
-        // This method will not be run if the bapi is run without authorization check.
-    }
-    
-    /**
-     * Hook - run after a successful authorization check
-     */
-    protected function afterAuthorization()
-    {
-        // This method will run immediately after the authorization, if the authorization is successful.
-        // This method will not be run if the bapi is run without authorization check.
-    }
-    
-    /**
-     * Hook - run before the handle method is called.
-     */
-    protected function beforeHandle()
-    {
-        // This method is run just before running the handle method, so if you have any logic to run
-        // after the authorization and the validation, implement it here.
-    }
-    
-    /**
-     * Hook - Post-processing of the bapi result.
-     * !!! Don't forget to update this comment and tell what you actually do with the result.
-     *
-     * @param $result
-     *
-     * @return mixed
-     */
-    protected function afterHandle($result) : mixed
+    protected function processResult($result) : mixed
     {
         // Any post-bapi-run data processing goes here. The result of the handle method if received as
         // the $result parameter. Whatever you return here, will be the result returned by the bapi
@@ -103,9 +65,9 @@ class DUMMY_CLASS extends Bapi
     }
 
     /**
-     * Hook - if any exception is thrown, it is caught and forwarded to this
-     * method. You can check it and act on it here. By default, the
-     * exception is just thrown and nothing is returned.
+     * Hook: an exception thrown during the bapi execution is thrown by the Bapi if it is included in the
+     * list of exceptions returned by the throwableExceptions() method, otherwise it is passed to this
+     * method, which can handle it. Deleting this method will cause all exceptions to be thrown.
      */
     protected function handleException(\Exception $exception)
 	{
