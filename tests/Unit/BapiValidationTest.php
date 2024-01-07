@@ -3,10 +3,10 @@ namespace AntonioPrimera\Bapi\Tests\Unit;
 
 use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
+use AntonioPrimera\Bapi\Tests\TestCase;
 use AntonioPrimera\Bapi\Tests\TestContext\CreateCompanyBapi;
-use Illuminate\Support\Collection;
 
-class BapiValidationTest extends \AntonioPrimera\Bapi\Tests\TestCase
+class BapiValidationTest extends TestCase
 {
 	
 	//--- Validation Passing Tests ------------------------------------------------------------------------------------

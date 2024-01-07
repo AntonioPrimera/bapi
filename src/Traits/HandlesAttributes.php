@@ -12,7 +12,10 @@ trait HandlesAttributes
 		if (isset($this->attributes[$key]))
 			return $this->attributes[$key];
 		
-		throw new BapiException("Attribute $key does not exist");
+		throw new BapiException(
+			"Bapi does not have an attribute '$key'."
+			. " Make sure you use named attributes when calling the bapi 'run' method."
+		);
     }
     
     public function __set($key, $value)

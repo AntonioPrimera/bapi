@@ -301,6 +301,47 @@ Another way to render a universal response for your business validation exceptio
 create a subclass of the BapiValidationException and implement the ***render()*** method. For
 this, you can check the **Laravel documentation** on **Error Handling**
 
+### Validating attributes
+
+If you want to validate attributes and throw a ValidationException, like the form validation
+does, you can add the ***ValidatesAttributes*** trait to your Bapi. This trait overrides the
+default exception hadling mechanism in Bapis and transforms BapiValidationExceptions containing
+BapiValidationIssues into ValidationExceptions, which are handled by the default Laravel
+exception handler.
+
+Concretely, this means that if you add the ***ValidatesAttributes*** trait to your Bapi and
+return a BapiValidationIssue or an array of BapiValidationIssues from the ***validate()***
+method, a ValidationException will be thrown, which will add the validation issues to the
+***$errors*** variable, which is available in the views.
+
+For example, if you would want to validate the company name, you could do something like this...
+
+```php
+    use \AntonioPrimera\Bapi\Traits\ValidatesAttributes;
+    
+    protected function validate()
+    {
+        //business validation - whether the company name is unique
+        if ($this->comapanyNameIsNotUnique($this->company))
+            return new \AntonioPrimera\Bapi\Components\BapiValidationIssue(
+                'companyName',
+                $this->company->name,
+                'Company name is not unique',
+            );
+            
+        return true;
+    }
+```
+
+... and then in your form, you would be able to display an error message for the company name,
+like this:
+
+```html
+    @error('companyName')
+        <div class="alert alert-danger">{{ $message }}</div>
+    @enderror
+```
+
 ### Authentication & Actors
 
 The Bapi instance offers the public `actor()` method, which is just a wrapper for the
