@@ -254,10 +254,10 @@ e.g. "User is not of legal age!") or as a translation key (e.g. "exceptions.age.
 
 ```php
     $bapiValidationIssue = new \AntonioPrimera\Bapi\Components\BapiValidationIssue(
-        'companyName',          //the name of the attribute at fault
-        'Amazon UK',            //the value of the attribute
-        'not-unique',           //the issue that occurred
-        'C:N:NU'                //optionally, an issue code
+        attributeName: 'companyName',      //the name of the attribute at fault
+        attributeValue: 'Amazon UK',       //the value of the attribute
+        errorMessage: 'not-unique',        //the issue that occurred
+        errorCode: 'C:N:NU'                //optionally, an issue code
     );
 ```
 

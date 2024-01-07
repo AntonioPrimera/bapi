@@ -43,9 +43,9 @@ class BapiValidationTest extends \AntonioPrimera\Bapi\Tests\TestCase
 			CreateCompanyBapi::run(name: 'Issue');
 		} catch (BapiValidationException $bapiValidationException) {
 			$this->assertInstanceOf(BapiValidationIssue::class, $bapiValidationException->validationErrors);
-			$this->assertEquals('name', $bapiValidationException->validationErrors->attribute);
-			$this->assertEquals('Issue', $bapiValidationException->validationErrors->value);
-			$this->assertEquals('Some error', $bapiValidationException->validationErrors->error);
+			$this->assertEquals('name', $bapiValidationException->validationErrors->attributeName);
+			$this->assertEquals('Issue', $bapiValidationException->validationErrors->attributeValue);
+			$this->assertEquals('Some error', $bapiValidationException->validationErrors->errorMessage);
 		}
 	}
 	

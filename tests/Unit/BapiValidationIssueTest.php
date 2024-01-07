@@ -12,9 +12,9 @@ class BapiValidationIssueTest extends TestCase
 		$bapiValidationError = new BapiValidationIssue('name', 'George', 'not-unique', 123);
 		
 		$this->assertInstanceOf(BapiValidationIssue::class, $bapiValidationError);
-		$this->assertEquals('name', $bapiValidationError->attribute);
-		$this->assertEquals('George', $bapiValidationError->value);
-		$this->assertEquals('not-unique', $bapiValidationError->error);
+		$this->assertEquals('name', $bapiValidationError->attributeName);
+		$this->assertEquals('George', $bapiValidationError->attributeValue);
+		$this->assertEquals('not-unique', $bapiValidationError->errorMessage);
 		$this->assertEquals(123, $bapiValidationError->errorCode);
 	}
 	
@@ -26,6 +26,6 @@ class BapiValidationIssueTest extends TestCase
 		
 		$this->expectException(\Error::class);
 		/** @noinspection PhpReadonlyPropertyWrittenOutsideDeclarationScopeInspection */
-		$bapiValidationError->attribute = 'age';
+		$bapiValidationError->attributeName = 'age';
 	}
 }

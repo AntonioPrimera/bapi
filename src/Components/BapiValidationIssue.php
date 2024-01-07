@@ -7,10 +7,10 @@ namespace AntonioPrimera\Bapi\Components;
 class BapiValidationIssue
 {
 	public function __construct(
-		public readonly string $attribute,	//name of the attribute which failed validation
-		public readonly mixed $value,		//value of the attribute which failed validation
-		public readonly string $error,		//validation error in plain text, translation key or an error key
-		public readonly string|int|null $errorCode = null	//optionally, a unique error code can be added as string/int
+		public readonly string          $attributeName,		//name of the attribute which failed validation
+		public readonly mixed           $attributeValue,	//value of the attribute which failed validation
+		public readonly string          $errorMessage,		//validation error message
+		public readonly string|int|null $errorCode = null	//optional error code as string/int
 	)
 	{
 	}
