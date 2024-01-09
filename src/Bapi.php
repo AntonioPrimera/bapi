@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\DB;
 use ReflectionMethod;
 
 /**
- * @method mixed run(...$params)
- * @method static withAuthorizationCheck()
- * @method static withoutAuthorizationCheck()
+ * @method static static withoutAuthorizationCheck()
  */
 class Bapi
 {

@@ -16,7 +16,7 @@ class DUMMY_CLASS extends Bapi
 		// Return boolean true for a successful authorization check or false to fail the authorization check.
 		// Delete this method if you don't need authorization checks (not recommended)
 
-		// You may use the $this->actor() method to get the actor object and check it's properties
+		// You may use the $this->actor() method to get the actor object and check its properties
 		// You may also use the $this->can('ability', ...$args) method to call the corresponding Policy method
 
 		return false;
