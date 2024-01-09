@@ -11,7 +11,7 @@ class DUMMY_CLASS extends Bapi
     /**
 	 * Authorization check
 	 */
-	protected function authorize() : bool
+	protected function authorize(): bool
 	{
 		// Return boolean true for a successful authorization check or false to fail the authorization check.
 		// Delete this method if you don't need authorization checks (not recommended)
@@ -27,7 +27,7 @@ class DUMMY_CLASS extends Bapi
      * Business data validation.
      * @throws BapiValidationException
      */
-    protected function validate() : mixed
+    protected function validate(): mixed
     {
         // Do any business specific validations. If the validation is successful, return boolean true
         // Any other result will be wrapped in a BapiValidationException and thrown. You may use
@@ -55,7 +55,7 @@ class DUMMY_CLASS extends Bapi
      * Hook: After the handle method is executed, the result is passed to this method, which can process it and
      * return it. If you don't want to post-process the result, just remove this hook.
      */
-    protected function processResult($result) : mixed
+    protected function processResult($result): mixed
     {
         // Any post-bapi-run data processing goes here. The result of the handle method if received as
         // the $result parameter. Whatever you return here, will be the result returned by the bapi

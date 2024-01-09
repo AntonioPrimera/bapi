@@ -11,7 +11,7 @@ class DUMMY_CLASS extends Bapi
     /**
 	 * Authorization check
 	 */
-	protected function authorize() : bool
+	protected function authorize(): bool
 	{
 		// Return boolean true for a successful authorization check or false to fail the authorization check.
 		// Delete this method if you don't need authorization checks (not recommended)
@@ -26,7 +26,7 @@ class DUMMY_CLASS extends Bapi
      * Business data validation
      * @throws BapiValidationException
      */
-    protected function validate() : mixed
+    protected function validate(): mixed
     {
         // Do any business specific validations. If the validation is successful, return boolean true
 		// Any other result will be wrapped in a BapiValidationException and thrown. You may use
