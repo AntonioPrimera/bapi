@@ -5,13 +5,14 @@ use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use AntonioPrimera\Bapi\Tests\TestCase;
 use AntonioPrimera\Bapi\Tests\TestContext\CreateCompanyBapi;
+use PHPUnit\Framework\Attributes\Test;
 
 class BapiValidationTest extends TestCase
 {
 	
 	//--- Validation Passing Tests ------------------------------------------------------------------------------------
 	
-	/** @test */
+	#[Test]
 	public function returning_true_from_the_validate_method_should_pass_the_validation()
 	{
 		$this->assertEquals('True', CreateCompanyBapi::run(name: 'True'));
@@ -19,14 +20,14 @@ class BapiValidationTest extends TestCase
 	
 	//--- Validation Failure Tests ------------------------------------------------------------------------------------
 	
-	/** @test */
+	#[Test]
 	public function returning_an_empty_array_from_the_validate_method_should_not_pass_the_validation()
 	{
 		$this->expectException(BapiValidationException::class);
 		CreateCompanyBapi::run(name: 'EmptyArray');
 	}
 	
-	/** @test */
+	#[Test]
 	public function returning_false_from_the_validate_method_should_throw_an_empty_bapi_validation_exception()
 	{
 		try {
@@ -36,7 +37,7 @@ class BapiValidationTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function returning_an_issue_instance_from_the_validate_method_should_throw_a_bapi_validation_exception()
 	{
 		try {
@@ -49,7 +50,7 @@ class BapiValidationTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function returning_an_array_of_issues_from_the_validate_method_should_throw_a_bapi_validation_exception()
 	{
 		try {
@@ -64,7 +65,7 @@ class BapiValidationTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function throwing_a_bapi_validation_exception_from_the_validate_method_should_throw_that_exception()
 	{
 		try {

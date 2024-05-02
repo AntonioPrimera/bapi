@@ -8,6 +8,7 @@ use AntonioPrimera\Bapi\Tests\TestContext\UpdateUserBapi;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class BapiDbTransactionTest extends TestCase
 {
@@ -43,7 +44,7 @@ class BapiDbTransactionTest extends TestCase
 	
 	//--- Setup tests -------------------------------------------------------------------------------------------------
 	
-	/** @test */
+	#[Test]
 	public function setup_test___database_is_setup_and_the_user_table_available()
 	{
 		$this->assertEmpty(TestUser::all());
@@ -56,7 +57,7 @@ class BapiDbTransactionTest extends TestCase
 		$this->assertDatabaseCount('test_users', 1);
 	}
 	
-	/** @test */
+	#[Test]
 	public function context_test___the_create_user_bapi_creates_a_user_in_the_db()
 	{
 		$this->assertEmpty(TestUser::all());
@@ -66,7 +67,7 @@ class BapiDbTransactionTest extends TestCase
 		$this->assertDatabaseCount('test_users', 1);
 	}
 	
-	/** @test */
+	#[Test]
 	public function context_test___the_update_user_bapi_updates_the_given_user_in_the_db()
 	{
 		$user = CreateUserBapi::run(name: 'John', password: '123');
@@ -81,7 +82,7 @@ class BapiDbTransactionTest extends TestCase
 	
 	//--- Actual unit tests -------------------------------------------------------------------------------------------
 	
-	/** @test */
+	#[Test]
 	public function a_successful_bapi_call_will_commit_the_changes_to_the_db()
 	{
 		$user = CreateUserBapi::run(name: 'Mary', password: '987');
@@ -93,7 +94,7 @@ class BapiDbTransactionTest extends TestCase
 		$this->assertDatabaseCount('test_users', 2);
 	}
 	
-	/** @test */
+	#[Test]
 	public function a_failed_bapi_call_will_rollback_all_changes_to_the_db_made_during_its_lifecycle()
 	{
 		$user = CreateUserBapi::run(name: 'Mary', password: '987');

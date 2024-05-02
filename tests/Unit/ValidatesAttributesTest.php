@@ -5,10 +5,11 @@ use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use AntonioPrimera\Bapi\Tests\TestCase;
 use AntonioPrimera\Bapi\Tests\TestContext\ValidatorBapi;
 use Illuminate\Validation\ValidationException;
+use PHPUnit\Framework\Attributes\Test;
 
 class ValidatesAttributesTest extends TestCase
 {
-	/** @test */
+	#[Test]
 	public function it_will_throw_a_validation_exception_if_the_bapi_throws_an_exception_with_a_bapi_validation_issue()
 	{
 		try {
@@ -18,7 +19,7 @@ class ValidatesAttributesTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_will_throw_a_validation_exception_if_bapi_throws_a_exception_with_a_list_of_validation_issues()
 	{
 		try {
@@ -30,7 +31,7 @@ class ValidatesAttributesTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_will_not_convert_bapi_validation_exceptions_if_they_do_not_contain_bapi_validation_issues()
 	{
 		try {
@@ -40,7 +41,7 @@ class ValidatesAttributesTest extends TestCase
 		}
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_will_not_convert_bapi_validation_exceptions_with_a_string_payload()
 	{
 		try {

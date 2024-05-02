@@ -4,10 +4,11 @@ namespace AntonioPrimera\Bapi\Tests\Feature;
 use AntonioPrimera\Bapi\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use PHPUnit\Framework\Attributes\Test;
 
 class MakeBapiCommandTest extends TestCase
 {
-	/** @test */
+	#[Test]
 	public function a_bapi_is_successfully_created_when_calling_the_make_bapi_artisan_command()
 	{
 		$bapiName = 'TestSuite/TestBapi';
@@ -24,7 +25,7 @@ class MakeBapiCommandTest extends TestCase
 		$this->cleanup($bapiFileName);
 	}
 	
-	/** @test */
+	#[Test]
 	public function a_generated_bapi_can_be_run_without_doing_anything()
 	{
 		$bapiName = 'TestSuite/TestBapi';
@@ -48,7 +49,7 @@ class MakeBapiCommandTest extends TestCase
 		$this->cleanup($bapiFileName);
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_can_also_create_a_specific_test_file_if_the_proper_command_option_was_given()
 	{
 		$bapiName = 'TestSuite/TestBapi';
@@ -73,7 +74,7 @@ class MakeBapiCommandTest extends TestCase
 		$this->cleanupTestFile($testName);
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_can_also_create_a_default_test_file_if_the_proper_command_option_was_given()
 	{
 		$bapiName = 'TestSuite/TestBapi';
@@ -97,7 +98,7 @@ class MakeBapiCommandTest extends TestCase
 		$this->cleanupTestFile($testName);
 	}
 	
-	/** @test */
+	#[Test]
 	public function it_will_create_a_default_test_file_if_the_proper_environment_key_is_set()
 	{
 		$bapiName = 'TestSuite/TestBapi';

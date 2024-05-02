@@ -4,11 +4,12 @@ namespace AntonioPrimera\Bapi\Tests\Unit;
 use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\Test;
 
 class BapiValidationExceptionTest extends \AntonioPrimera\Bapi\Tests\TestCase
 {
 	
-	/** @test */
+	#[Test]
 	public function a_bapi_validation_exception_can_receive_a_single_bapi_validation_error_as_an_argument()
 	{
 		$validationError = new BapiValidationIssue('name', 'George', 'female-name-required');
@@ -17,7 +18,7 @@ class BapiValidationExceptionTest extends \AntonioPrimera\Bapi\Tests\TestCase
 		$this->assertSame($validationError, $exception->validationErrors);
 	}
 	
-	/** @test */
+	#[Test]
 	public function a_bapi_validation_exception_can_receive_a_list_of_validation_errors_as_argument()
 	{
 		$nameValidationError = new BapiValidationIssue('name', 'George', 'female-name-required');

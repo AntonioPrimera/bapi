@@ -3,10 +3,11 @@ namespace AntonioPrimera\Bapi\Tests\Unit;
 
 use AntonioPrimera\Bapi\Components\BapiValidationIssue;
 use AntonioPrimera\Bapi\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class BapiValidationIssueTest extends TestCase
 {
-	/** @test */
+	#[Test]
 	public function a_bapi_validation_error_can_be_created_and_its_data_is_accessible()
 	{
 		$bapiValidationError = new BapiValidationIssue('name', 'George', 'not-unique', 123);
@@ -18,7 +19,7 @@ class BapiValidationIssueTest extends TestCase
 		$this->assertEquals(123, $bapiValidationError->errorCode);
 	}
 	
-	/** @test */
+	#[Test]
 	public function the_attributes_of_a_bapi_validation_error_can_not_be_changed_directly()
 	{
 		/** @noinspection PhpObjectFieldsAreOnlyWrittenInspection */

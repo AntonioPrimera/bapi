@@ -61,4 +61,9 @@ class TestUser extends \Illuminate\Database\Eloquent\Model implements Authentica
 	{
 		return $a + $b;
 	}
+	
+	public function getAuthPasswordName()
+	{
+		return 'password-name';
+	}
 }
