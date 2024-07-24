@@ -231,6 +231,38 @@ Although you might never use it, a ***withAuthorizationCheck()*** method is avai
 be called to re-enable the authorization check if it was disabled previously for a Bapi
 instance.
 
+### Skipping DB transactions
+
+If you want to run a BAPI without a database transaction, you can call the ***withoutDbTransaction()***
+method either statically or as an instance method.
+
+For example, if you want to call the bapi in the previous example without running the
+database transaction, you could do the following:
+
+```php
+    //static method call
+    UpdatePostBapi::withoutDbTransaction()
+        ->run($post, 'New title', 'Some contents');
+```
+
+```php
+    //instance method call
+    $updatePostBapi = new UpdatePostBapi();
+    $updatePostBapi->withoutDbTransaction();
+    $updatePostBapi->run($post, 'New title', 'Some contents');
+```
+
+While this is possible and necessary in some cases, it is risky, so you should use it with
+caution.
+
+If you want to completely disable the database transaction for a Bapi, you can set the
+***$useDbTransaction*** property to false in the Bapi class, overriding the default value.
+
+If you want to completely disable the database transaction for all Bapis, you can create a
+new base class for your Bapis and set the ***$useDbTransaction*** property to false in that
+base class. Then, you can set the ***BAPI_GENERATOR_BASE_CLASS*** environment variable to
+point to your new base class, so that all Bapis will inherit from it.
+
 ### Validating the business data
 
 While the controllers are responsible to validate user input data, these validations are
