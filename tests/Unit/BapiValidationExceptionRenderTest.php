@@ -22,7 +22,9 @@ class BapiValidationExceptionRenderTest extends \AntonioPrimera\Bapi\Tests\TestC
 				[
 					'error' => 'BusinessValidationError',
 					'message' => 'string error message',
-					'validation_errors' => [['type' => 'generic', 'message' => 'string error message']]
+					'validation_errors' => [
+						['type' => 'generic', 'message' => 'string error message']
+					]
 				],
 				$renderedErrors->getData(true)
 			);

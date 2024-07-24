@@ -6,16 +6,20 @@ use AntonioPrimera\Bapi\Traits\HandlesAttributes;
 use AntonioPrimera\Bapi\Traits\HandlesAuthorization;
 use AntonioPrimera\Bapi\Traits\HandlesExceptions;
 use AntonioPrimera\Bapi\Traits\HandlesValidation;
+use AntonioPrimera\Bapi\Traits\UsesDbTransactions;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use ReflectionMethod;
 
 /**
  * @method static static withoutAuthorizationCheck()
+ * @method static static withAuthorizationCheck()
+ * @method static static withoutDbTransaction()
+ * @method static static withDbTransaction()
  */
 class Bapi
 {
-    use HandlesValidation, HandlesAttributes, HandlesAuthorization, HandlesExceptions;
+    use HandlesValidation, HandlesAttributes, HandlesAuthorization, HandlesExceptions, UsesDbTransactions;
 	
     public function __construct()
     {
@@ -32,6 +36,8 @@ class Bapi
 			'run' => $this->handleRun(...$params),
 			'withAuthorizationCheck' => $this->setAuthorizationCheck(true),
 			'withoutAuthorizationCheck' => $this->setAuthorizationCheck(false),
+			'withDbTransaction' => $this->setDbTransaction(true),
+			'withoutDbTransaction' => $this->setDbTransaction(false),
 			default => throw new Exception(sprintf(
 				'Method %s::%s does not exist.', static::class, $method
 			))
@@ -94,7 +100,8 @@ class Bapi
 	protected function handleRun(...$args)
     {
         try {
-            DB::beginTransaction();
+			if ($this->useDbTransaction)
+            	DB::beginTransaction();
     
             //take the attributes from the "run" method (static / instance) and match them with
 			//the arguments of the "handle" method. The "run" method must use named arguments
@@ -113,12 +120,14 @@ class Bapi
             //run the result through the "afterHandle" hook, for any necessary data transformation or cleanup
             $finalResult = $this->processResult($result);										  //Hook: processResult
             
-            DB::commit();
+			if($this->useDbTransaction)
+            	DB::commit();
             
             return $finalResult;
         } catch (Exception $exception) {
         	//in case of any exception, roll back any changes to the DB
-            DB::rollBack();
+			if($this->useDbTransaction)
+            	DB::rollBack();
             
             //if the exception is one listed in $this->throw, then just throw the exception ...
             $this->throwAcceptableExceptions($exception);
