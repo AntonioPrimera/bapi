@@ -1,0 +1,34 @@
+<?php
+namespace DUMMY_NAMESPACE;
+
+use BAPI_BASE_CLASS;
+use AntonioPrimera\Bapi\Exceptions\BapiValidationException;
+use AntonioPrimera\Bapi\Components\BapiValidationIssue;
+
+class DUMMY_CLASS extends InternalBapi
+{
+
+    /**
+     * Business data validation
+     * @throws BapiValidationException
+     */
+    protected function validate(): mixed
+    {
+        // Do any business specific validations. If the validation is successful, return boolean true
+		// Any other result will be wrapped in a BapiValidationException and thrown. You may use
+		// BapiValidationIssue objects to return validation issues for specific attributes
+		// You may also throw a BapiValidationException manually, if you want to.
+
+        return true;
+    }
+    
+    /**
+     * Add the business logic here and the necessary arguments, which will be passed to the bapi
+     * 'call' method. The arguments will be made accessible as $this->argumentName inside
+	 * the bapi, so you can use them in your business logic, during validation.
+     */
+    public function handle()
+    {
+        // Add your business logic here
+    }
+}

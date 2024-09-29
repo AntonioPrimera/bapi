@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Gate;
 
 trait HandlesAuthorization
 {
+	use HandlesMethodCalls;
+	
 	protected Authenticatable|null $actor = null;
     protected bool $withAuthorizationCheck = true;
 	
@@ -15,6 +17,9 @@ trait HandlesAuthorization
 	 */
 	protected function handleAuthorization(): static
 	{
+		if (!$this->withAuthorizationCheck)
+			return $this;
+		
 		$authorized = $this->callMethod('authorize');
 		if (!$authorized)
 			throw new AuthorizationException('You are not authorized to run ' . class_basename($this));

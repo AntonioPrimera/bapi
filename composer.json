@@ -17,7 +17,9 @@
         "antonioprimera/laravel-generator-command": "^2.4|^3.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^9"
+        "orchestra/testbench": "^9",
+        "pestphp/pest": "3.x-dev",
+        "pestphp/pest-plugin-laravel": "3.x-dev"
     },
     "extra": {
         "laravel": {
@@ -40,6 +42,7 @@
         }
     },
     "scripts": {
+        "pest": "./vendor/bin/pest",
         "test": "./vendor/bin/phpunit --testdox --colors=always",
         "post-autoload-dump": [
             "@clear",
@@ -53,5 +56,10 @@
             "@build",
             "@php vendor/bin/testbench serve"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }

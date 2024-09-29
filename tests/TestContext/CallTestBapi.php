@@ -24,7 +24,7 @@ class CallTestBapi extends Bapi
 	{
 		$this->methodCalls[] = 'handle';
 		$this->handleMethodWasCalled = true;
-		$this->attributeLists['handle'] = $this->attributes;
+		$this->attributeLists['handle'] = $this->arguments;
 		
 		//if an exception instance was given, throw it
 		//if boolean true was given throw a new generic exception
@@ -36,14 +36,14 @@ class CallTestBapi extends Bapi
 	
 	public function exposeAttributes()
 	{
-		return $this->attributes;
+		return $this->arguments;
 	}
 	
 	//--- Hooks -------------------------------------------------------------------------------------------------------
 	
 	protected function validate(): bool
 	{
-		$this->attributeLists['validate'] = $this->attributes;
+		$this->attributeLists['validate'] = $this->arguments;
 		$this->methodCalls[] = 'validate';
 		
 		return strlen($this->msg) < 10;
@@ -51,7 +51,7 @@ class CallTestBapi extends Bapi
 	
 	protected function authorize()
 	{
-		$this->attributeLists['authorize'] = $this->attributes;
+		$this->attributeLists['authorize'] = $this->arguments;
 		$this->methodCalls[] = 'authorize';
 		
 		return true;
@@ -59,7 +59,7 @@ class CallTestBapi extends Bapi
 	
 	protected function processResult($result): mixed
 	{
-		$this->attributeLists['processResult'] = $this->attributes;
+		$this->attributeLists['processResult'] = $this->arguments;
 		$this->methodCalls[] = 'processResult';
 		
 		if ($this->msg === 'AHC')

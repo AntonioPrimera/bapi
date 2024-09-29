@@ -386,3 +386,68 @@ protected function authorize()
         && $this->can('some-action', $someModel);
 }
 ```
+
+## Calling a normal BAPI internally (from another BAPI)
+
+Some Bapis should be called in controllers, maybe even blade views (e.g. when using Laravel Livewire),
+and these Bapis should always have an authorization check and should usually run inside a DB Transaction.
+
+Other Bapis can also be called internally, from inside another bapi, which already started a DB transaction
+and handled the authorization check. When called from another bapi, a bapi should not run a DB transaction
+and should not do any other authorization checks by default (unless specifically requested to).
+
+In order to use a Bapi internally, you should remove the authorization check or have it return false (so
+that when called from outside, it will fail) and always call it from another Bapi using the
+`call(...)` method instead of `run(...)`.
+
+For example, if you have a `CreatePostBapi` and you want to call a `CreatePostNotificationBapi` from
+inside the `CreatePostBapi`, you should do something like this:
+
+```php
+    // Inside the CreatePostBapi
+    protected function handle(Post $post, $title, $contents)
+    {
+        $post = Post::create([
+            'title' => $title,
+            'contents' => $contents
+        ]);
+
+        //the "call" method is used, instead of the "run" method
+        CreatePostNotificationBapi::call(post: $post);
+        
+        return $post;
+    }
+```
+
+If you want to call a bapi internally, but force the authorization check to run, you can use the
+`callWithAuthorizationCheck(...)` method.
+
+```php
+    // Inside a removeTopicBapi
+    protected function handle(Topic $topic): void
+    {
+        //remove all posts from the topic, checking remove authorization for each post
+        foreach ($topic->posts as $post)
+            DeletePostBapi::callWithAuthorizationCheck(post: $post);
+            
+        $topic->delete();
+    }
+```
+
+## Creating BAPIs which can only be called internally
+
+In some cases, you want some BAPIs to only be called by other BAPIs and never from Controllers,
+Jobs, Commands, Blade views or other parts of your application. In order to achieve this, you can
+extend the `InternalBapi` class instead of the `Bapi` class.
+
+These exclusively internal BAPIs will not run an authorization check, will not run within a DB Transaction
+and do not handle any Exceptions. They still offer validation and handling the result, using the same
+lifecycle as the normal BAPIs.
+
+You can create an internal bapi using the same artisan command, with the "-I" or "--internal" flag.
+
+```bash
+php artisan make:bapi Posts/CreatePostBapi --internal
+# or
+php artisan make:bapi Posts/CreatePostBapi -I
+```

@@ -26,6 +26,25 @@ class MakeBapiCommandTest extends TestCase
 	}
 	
 	#[Test]
+	public function an_internal_bapi_is_successfully_created_using_the_make_bapi_artisan_command()
+	{
+		$bapiName = 'TestSuite/TestBapi';
+		$bapiFileName = $this->bapiFileName($bapiName);
+		$this->cleanup($bapiFileName);
+		
+		//run the make command
+		Artisan::call("make:bapi {$bapiName} -I");
+		
+		//assert a new file is created
+		$bapi = \AntonioPrimera\FileSystem\File::instance($bapiFileName);
+		$this->assertTrue($bapi->exists);
+		$this->assertTrue($bapi->contains('AntonioPrimera\Bapi\InternalBapi'));
+		
+		//delete the generated file
+		$this->cleanup($bapiFileName);
+	}
+	
+	#[Test]
 	public function a_generated_bapi_can_be_run_without_doing_anything()
 	{
 		$bapiName = 'TestSuite/TestBapi';
