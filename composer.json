@@ -42,7 +42,7 @@
         }
     },
     "scripts": {
-        "pest": "./vendor/bin/pest",
+        "pest": "./vendor/bin/pest --coverage",
         "test": "./vendor/bin/phpunit --testdox --colors=always",
         "post-autoload-dump": [
             "@clear",

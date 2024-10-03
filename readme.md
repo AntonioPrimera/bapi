@@ -451,3 +451,26 @@ php artisan make:bapi Posts/CreatePostBapi --internal
 # or
 php artisan make:bapi Posts/CreatePostBapi -I
 ```
+
+### Testing internal Bapis
+
+Because internal bapis can only be called internally, you need a helper in order to test them. You can use
+the `AntonioPrimera\Bapi\TestInternalBapi` class to test your internal Bapis.
+
+For example, if you have an internal bapi called `CreatePostBapi` (inheriting the InternalBapi class), you
+can test it like this:
+
+```php
+use AntonioPrimera\Bapi\TestInternalBapi;
+
+//in your test file
+$bapiResult = TestInternalBapi::run(
+    bapi: CreatePostBapi::class,
+    title: 'New post',
+    contents: 'Some contents'
+);
+```
+
+Note that you must provide the full class name of the internal bapi as the first argument, followed by the
+**named arguments** you want to pass to the bapi. This helper will not run with classes other than Internal Bapis
+or outside the testing environment.
