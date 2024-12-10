@@ -65,8 +65,6 @@ abstract class Bapi extends BaseBapi
 	/**
 	 * Use this method when calling a bapi internally from another bapi,
 	 * in order to skip DB Transaction and the authorization check.
-	 *
-	 * @throws Exception
 	 */
 	protected static function call(...$args): mixed
 	{
