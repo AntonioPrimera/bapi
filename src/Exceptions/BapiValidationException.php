@@ -30,7 +30,10 @@ class BapiValidationException extends BapiException
 	
 	//--- Protected helpers -------------------------------------------------------------------------------------------
 	
-	protected function determineMessageFromValidationErrors(string $defaultMessage)
+	/**
+	 * Determine the exception message from the validation errors
+	 */
+	public function determineMessageFromValidationErrors(string $defaultMessage)
 	{
 		$firstError = Collection::wrap($this->validationErrors)->first();
 		
@@ -45,9 +48,9 @@ class BapiValidationException extends BapiException
 		return $defaultMessage ?: '[Unspecified validation error]';
 	}
 	
-	//--- Protected render helpers ------------------------------------------------------------------------------------
+	//--- Public render helpers ---------------------------------------------------------------------------------------
 	
-	protected function renderJsonResponse(Request $request): JsonResponse
+	public function renderJsonResponse(Request $request): JsonResponse
 	{
 		return response()->json([
 			'error' => 'BusinessValidationError',
@@ -56,7 +59,7 @@ class BapiValidationException extends BapiException
 		], 409);
 	}
 	
-	protected function renderValidationErrors(Request $request): array
+	public function renderValidationErrors(Request $request): array
 	{
 		return Collection::wrap($this->validationErrors)
 			->map(fn($error) => $this->renderValidationError($error, $request))
@@ -65,7 +68,7 @@ class BapiValidationException extends BapiException
 			->toArray();
 	}
 	
-	protected function renderValidationError(mixed $error, Request $request): mixed
+	public function renderValidationError(mixed $error, Request $request): mixed
 	{
 		//if the validation errors are a string, return it as a single-element array
 		if (is_string($error))
@@ -82,7 +85,7 @@ class BapiValidationException extends BapiException
 		return null;
 	}
 	
-	protected function renderStringIssue(string $issue): array
+	public function renderStringIssue(string $issue): array
 	{
 		return [
 			'type' => 'generic',
@@ -90,7 +93,7 @@ class BapiValidationException extends BapiException
 		];
 	}
 	
-	protected function renderBapiValidationIssue(BapiValidationIssue $bapiValidationIssue): array
+	public function renderBapiValidationIssue(BapiValidationIssue $bapiValidationIssue): array
 	{
 		return [
 			'type' => 'attribute',
