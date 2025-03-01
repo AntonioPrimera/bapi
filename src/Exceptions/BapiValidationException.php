@@ -20,8 +20,9 @@ class BapiValidationException extends BapiException
 	public function render(Request $request)
 	{
 		//if a custom renderer is set, use it
-		if ($renderer = config('bapi.validationExceptionRenderer'))
-			return $renderer($this, $request);
+		$renderer = config('bapi.validationExceptionRenderer');
+		if ($renderer && is_callable($renderer))
+			return call_user_func($renderer, $this, $request);
 		
 		//default to json response
 		return $this->renderJsonResponse($request);
