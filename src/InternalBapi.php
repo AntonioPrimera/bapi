@@ -1,16 +1,12 @@
 <?php
 namespace AntonioPrimera\Bapi;
 
-use Exception;
-
 abstract class InternalBapi extends BaseBapi
 {
 	/**
 	 * Call an internal bapi using the static "call" method, from within another bapi
 	 * In comparison to a normal Bapi, an internal bapi will run without a
 	 * DB transaction, authorization check and exception handling
-	 *
-	 * @throws Exception
 	 */
 	protected static function call(...$args): mixed
 	{
@@ -20,8 +16,6 @@ abstract class InternalBapi extends BaseBapi
 	/**
 	 * Handle running the bapi, when called by another bapi (internal run)
 	 * No DB transaction is used and no authorization check is done
-	 *
-	 * @throws Exception
 	 */
 	protected function handleInternalRun(...$args): mixed
 	{

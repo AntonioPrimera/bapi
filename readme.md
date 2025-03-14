@@ -176,19 +176,19 @@ the following ways.
 
 ```php
     //static method call
-    UpdatePostBapi::run($post, 'New title', 'Some contents');
+    UpdatePostBapi::run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 ```php
     //instance method call
     $updatePostBapi = new UpdatePostBapi();
-    $updatePostBapi->run($post, 'New title', 'Some contents');
+    $updatePostBapi->run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 ```php
     //invoke
     $updatePostBapi = new UpdatePostBapi();
-    $updatePostBapi($post, 'New title', 'Some contents');
+    $updatePostBapi(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 ### Skipping the authorization check
@@ -207,14 +207,14 @@ authorization check, you could do the following:
 ```php
     //static method call
     UpdatePostBapi::withoutAuthorizationCheck()
-        ->run($post, 'New title', 'Some contents');
+        ->run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 ```php
     //instance method call
     $updatePostBapi = new UpdatePostBapi();
     $updatePostBapi->withoutAuthorizationCheck();
-    $updatePostBapi->run($post, 'New title', 'Some contents');
+    $updatePostBapi->run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 While this is possible, it is risky, because Bapis should be atomic bits and pieces
@@ -242,14 +242,14 @@ database transaction, you could do the following:
 ```php
     //static method call
     UpdatePostBapi::withoutDbTransaction()
-        ->run($post, 'New title', 'Some contents');
+        ->run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 ```php
     //instance method call
     $updatePostBapi = new UpdatePostBapi();
     $updatePostBapi->withoutDbTransaction();
-    $updatePostBapi->run($post, 'New title', 'Some contents');
+    $updatePostBapi->run(post: $post, title: 'New title', body: 'Some contents');
 ```
 
 While this is possible and necessary in some cases, it is risky, so you should use it with
