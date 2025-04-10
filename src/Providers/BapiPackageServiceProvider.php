@@ -1,6 +1,7 @@
 <?php
 namespace AntonioPrimera\Bapi\Providers;
 
+use AntonioPrimera\Bapi\Console\Commands\GenerateBapiHelperCodeCommand;
 use AntonioPrimera\Bapi\Console\Commands\MakeBapiCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +16,8 @@ class BapiPackageServiceProvider extends ServiceProvider
 		
 		if ($this->app->runningInConsole()) {
 			$this->commands([
-				MakeBapiCommand::class
+				MakeBapiCommand::class,
+				GenerateBapiHelperCodeCommand::class
 			]);
 		}
 	}
